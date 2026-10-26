@@ -47,7 +47,7 @@
 <section class="navy" data-background-color="#00356b">
   <div class="kicker">MGT 409 · AI Foundations for Managers · Final project</div>
   <h1 style="font-size:3.1em;margin:.2em 0 .1em">Career Test Drive</h1>
-  <p style="font-size:1.05em;color:#dbe8ff;max-width:900px">Students bust their own career myths with official government data, then <i>test-drive</i> the job before they pick a major.</p>
+  <p style="font-size:1.05em;color:#dbe8ff;max-width:900px">From "no idea" to a career, a major and a school, with every number from government data.</p>
   <p class="lbl" style="margin-top:1.4em">[YOUR NAME] · Yale SOM · github.com/ssaadeld-som/career-test-drive</p>
 </section>
 
@@ -79,7 +79,7 @@
     <tr><td><b>Naviance · Xello · YouScience</b></td><td>School-licensed quiz → career list</td><td>An MDRC randomized study found no meaningful change in course-taking</td></tr>
     <tr><td><b>BLS handbook · My Next Move</b></td><td>Static government pages</td><td>Never asks what you believe, so never corrects it</td></tr>
     <tr><td><b>ChatGPT</b></td><td>Chat</td><td>No sources; the same model without our data scored <b>25%</b></td></tr>
-    <tr><td style="color:#00356b"><b>Career Test Drive</b></td><td>Belief audit → test drive → road map</td><td><b>94%</b> accurate, every number verified, free</td></tr>
+    <tr><td style="color:#00356b"><b>Career Test Drive</b></td><td>Belief audit → day in the life → pay in <i>your</i> state → majors (1 &amp; 5-yr earnings) → schools → compare</td><td><b>94%</b> accurate, every number verified, free</td></tr>
   </table>
   <p class="small" style="margin-top:.8em">Tested on 16 labeled student beliefs across 13 careers, same model (gpt-6-luna) with and without our grounded fact sheets.</p>
 </section>
@@ -87,7 +87,7 @@
 <!-- 4 Agents -->
 <section>
   <div class="kicker">How it works</div>
-  <h2>Five agents, one job each</h2>
+  <h2>Nine agents, one job each</h2>
   <svg viewBox="0 -18 1000 348" width="100%" font-family="Inter, Helvetica, sans-serif">
     <defs><marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#00356b"/></marker></defs>
     <rect x="0" y="125" width="130" height="80" rx="14" fill="#eef3fa" stroke="#00356b"/><text x="65" y="160" text-anchor="middle" font-size="18" font-weight="700" fill="#0b1f3a">Student</text><text x="65" y="183" text-anchor="middle" font-size="13" fill="#5b6b82">career + beliefs</text>
@@ -101,23 +101,37 @@
     <text x="745" y="5" text-anchor="middle" font-size="12" fill="#63aaff" font-weight="700">IN PARALLEL</text>
     <text x="435" y="245" text-anchor="middle" font-size="13" fill="#5b6b82">numbered fact sheet</text><text x="435" y="263" text-anchor="middle" font-size="13" fill="#5b6b82">BLS wages · outlook · O*NET</text>
   </svg>
-  <p class="small">gpt-6-luna · typed outputs · per-agent usage caps · a validator rejects any number not in the government data</p>
+  <p class="small">Plus, cached per career or field: <b>Storyteller</b> (plain words + day in the life) and <b>Field Guide</b>. For Discover: <b>Profiler → matching engine (code) → Advisor</b>. gpt-6-luna · typed outputs · usage caps · numbers checked against the data.</p>
 </section>
 
-<!-- 5 Demo: reality check -->
+<!-- 5 Demo: discover + compare -->
+<section>
+  <div class="kicker">Demo · a student who "has no idea"</div>
+  <h2 style="font-size:1.4em">The more you share, the sharper the picks: then save &amp; compare</h2>
+  <div class="grid2">
+    <img class="shot" src="{{img:v2_discover_results}}" style="max-height:520px">
+    <img class="shot" src="{{img:v2_compare}}" style="max-height:520px">
+  </div>
+</section>
+
+<!-- 6 Demo: myths + day -->
 <section>
   <div class="kicker">Demo · "lawyer"</div>
-  <h2 style="font-size:1.5em">Reality check: 3 myths busted, with receipts</h2>
-  <img class="shot" src="{{img:verdicts}}" style="max-height:540px">
+  <h2 style="font-size:1.4em">Myths busted with receipts, then a narrated day on the job</h2>
+  <div class="grid2">
+    <img class="shot" src="{{img:verdicts}}">
+    <img class="shot" src="{{img:v2_day}}">
+  </div>
 </section>
 
-<!-- 6 Demo: test drive + road map -->
+<!-- 6b Demo: pay, schools, field -->
 <section>
-  <div class="kicker">Demo</div>
-  <h2 style="font-size:1.5em">Drive the job, then see the road</h2>
-  <div class="grid2">
-    <img class="shot" src="{{img:drive_choice}}">
-    <img class="shot" src="{{img:roadmap}}">
+  <div class="kicker">Demo · Connecticut</div>
+  <h2 style="font-size:1.4em">Pay in your state, where to study, and the whole field</h2>
+  <div class="grid3" style="gap:14px">
+    <img class="shot" src="{{img:v2_overview}}">
+    <img class="shot" src="{{img:v2_study}}">
+    <img class="shot" src="{{img:v2_ecosystem}}">
   </div>
 </section>
 
@@ -150,7 +164,7 @@
       <li><b>Distress:</b> points to a trusted adult and the 988 Lifeline</li>
       <li><b>Personal info, off-topic:</b> politely blocked</li>
       <li><b>Loops and overspend:</b> per-agent caps; $0.05 per session, $2 per day</li>
-      <li class="small">8 of 8 live and offline scenarios stopped · 14 automated tests pass</li>
+      <li class="small">8 of 8 live and offline scenarios stopped · 16 automated tests pass</li>
     </ul>
     <div>
       <img class="shot" src="{{img:blocked_gatekeeper}}" style="margin-bottom:12px">
@@ -159,35 +173,17 @@
   </div>
 </section>
 
-<!-- 9 Impact -->
-<section>
-  <div class="kicker">Impact</div>
+<!-- 10 Impact + next -->
+<section class="navy" data-background-color="#00356b">
+  <div class="kicker">Impact &amp; what's next</div>
   <h2>Every student gets a data-backed first conversation</h2>
   <div class="grid3">
-    <div class="card"><div class="big" style="font-size:1.6em">94%</div><div class="lbl">belief verdicts correct (vs 25% plain chatbot)</div></div>
-    <div class="card"><div class="big" style="font-size:1.6em">&lt;30 s</div><div class="lbl">for a full answer, vs 94 counselor-hours to give 376 students 15 minutes each</div></div>
-    <div class="card"><div class="big" style="font-size:1.6em">$3–5</div><div class="lbl">per month for one counselor's 376 students (10 runs each)</div></div>
+    <div class="card"><div class="big" style="font-size:1.5em">94%</div><div class="lbl">belief verdicts correct (vs 25% plain chatbot)</div></div>
+    <div class="card"><div class="big" style="font-size:1.5em">$3–5</div><div class="lbl">per month for one counselor's 376 students</div></div>
+    <div class="card"><div class="big" style="font-size:1.5em">5,351</div><div class="lbl">schools · 774 careers · 50 states + DC</div></div>
   </div>
-  <div class="todo" style="margin-top:22px"><b>FILL IN:</b> pilot users (role/age, career tried), before → after certainty from the in-app feedback, and one quote.</div>
-</section>
-
-<!-- 10 Next -->
-<section class="navy" data-background-color="#00356b">
-  <div class="kicker">What's next</div>
-  <h2>From a class project to a classroom</h2>
-  <div class="grid2">
-    <ul>
-      <li>Classroom pilot with a control group: measure belief accuracy before and after</li>
-      <li>State-level wages, plus College Scorecard cost against pay by major</li>
-      <li>Licenses grounded in CareerOneStop data</li>
-    </ul>
-    <ul>
-      <li>Anonymized counselor dashboard: the most common myths in a class</li>
-      <li>Spanish first, for first-generation families</li>
-      <li>Hosted, so any school can use it with no install</li>
-    </ul>
-  </div>
-  <p class="lbl" style="margin-top:1.2em">Data: BLS OEWS May 2024 · BLS Projections 2025–35 · O*NET 31.0 (CC BY 4.0)</p>
+  <div class="todo" style="margin:16px 0">FILL IN: pilot users (role/age, career tried), before → after certainty from the in-app feedback, and one quote.</div>
+  <p class="lbl">Next: a classroom pilot with a control group · College Scorecard cost vs. pay · an anonymized counselor dashboard of common myths · Spanish · hosted for schools</p>
 </section>
 
 </div></div>

@@ -183,7 +183,7 @@ function renderCareer(d) {
     <div id="plain" class="plain"><div class="plain-loading">Explaining this job in plain words…</div></div>
     <details class="desc-official"><summary>Official description (O*NET)</summary><p class="desc">${esc(c.description)}</p></details>
     <div class="stats">
-      <div class="stat"><div class="k">Median pay (2024)</div><div class="v">${money(c.median)}</div><div class="s">Half earn more, half less</div></div>
+      <div class="stat"><div class="k">U.S. median pay (2024)</div><div class="v">${money(c.median)}</div><div class="s">Half earn more, half less</div></div>
       <div class="stat"><div class="k">Job growth 2025–35</div><div class="v ${growth >= 3.5 ? "up" : growth < 0 ? "down" : ""}">${growthTxt}</div><div class="s">All US jobs: +3.5%</div></div>
       <div class="stat"><div class="k">Openings per year</div><div class="v">${c.openings == null ? "n/a" : c.openings.toLocaleString()}</div><div class="s">New jobs + people leaving</div></div>
       <div class="stat"><div class="k">Typical entry education</div><div class="v small">${esc(c.education || "n/a")}</div><div class="s">${c.pct_over_40_hours != null ? Math.round(c.pct_over_40_hours) + "% work 40+ hr weeks" : ""}</div></div>

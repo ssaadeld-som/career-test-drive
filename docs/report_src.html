@@ -59,8 +59,8 @@
     table { font-size: 8.6pt; margin: 8px 0 12px; }
     th, td { padding: 4px 6px; }
     figure { margin: 10px 0 12px; text-align: center; }
-    figure img { width: auto; max-width: 100%; max-height: 3.3in; margin: 0 auto; }
-    figure.half img { max-height: 2.6in; }
+    figure img { width: auto; max-width: 100%; max-height: 3.0in; margin: 0 auto; }
+    figure.half img { max-height: 2.9in; }
     figcaption { font-size: 8.5pt; text-align: left; }
     .kpi b { font-size: 18px; }
     .callout, .todo { font-size: 9.5pt; padding: 8px 12px; }
@@ -79,7 +79,7 @@
   <div class="inner">
     <div class="eyebrow">MGT 409 · AI Foundations for Managers · Final Project</div>
     <h1>Career Test Drive</h1>
-    <p class="one">A multi-agent app that helps students aged 12–18 bust their own career myths with official government data, then "test-drive" the job before they pick a college major.</p>
+    <p class="one">A multi-agent app that helps students aged 12–18 who know little about careers find ones that fit them, bust their myths with official government data, "test-drive" the job, and see the majors, schools and pay in their own state before they apply.</p>
     <div class="meta">
       <b>Author:</b> <span style="background:#fff7d6;color:#8a5a00;padding:0 6px;border-radius:4px">[YOUR NAME]</span>, Yale SOM<br>
       <b>GitHub repo:</b> <a href="https://github.com/ssaadeld-som/career-test-drive">github.com/ssaadeld-som/career-test-drive</a> (private; zlisto invited)<br>
@@ -137,6 +137,17 @@
   <li><b>It lets the student experience the work instead of reading about it.</b> The "test drive" puts the student in three realistic moments built from the job's real O*NET task list. They pick what they would do, then say whether they enjoyed it. The app compares their instincts with the work styles O*NET says matter for that job.</li>
   <li><b>Every number is verified.</b> Agents only see a numbered fact sheet, and a validator rejects any number they write that is not in it. ChatGPT cannot make that promise.</li>
 </ol>
+
+<p><b>A practical layer students and parents asked for.</b> Early testers told us the first version was "fancy but not very practical." Version 2 adds the information a student actually needs to choose a school and a program:</p>
+<ul>
+  <li><b>Discover mode</b> for students who know almost nothing. They pick strengths, hobbies, liked and disliked subjects, values and how many years of school they'd do. Suggestions unlock gradually: nothing below 5 inputs, fields at 5, specific careers at 9, careers plus majors and schools in their state at 14. We never suggest a career from one or two inputs.</li>
+  <li><b>Pay in your state</b> at three stages (starting, typical, senior) from BLS state data, plus the <b>1-year and 5-year earnings of graduates of the related majors</b> from the College Scorecard. That answers "what will I make after college, and five years later?" with real data.</li>
+  <li><b>Where to study:</b> the majors that lead to the job, and the colleges and community colleges that offer them, filterable by state, credential, and public or private, ranked by graduates' earnings (not prestige), with graduation rate, admission rate and net price.</li>
+  <li><b>A narrated "day in the life"</b> player and a <b>plain-words explanation</b> for confusing titles (adjudicator, law clerk), with "not to be confused with" and the different kinds of the job (prosecutor vs. public defender vs. corporate lawyer).</li>
+  <li><b>The field map:</b> every job in the field laid out by capability and preparation level, plus a whole-economy <b>map of fields (verticals) × capabilities (horizontals)</b>.</li>
+  <li><b>Save and compare</b> up to four careers side by side on 25 rows: pay, growth, schooling, majors, high-school classes, skills, hours and work setting.</li>
+</ul>
+<p>Naviance and Xello have career profiles and school search, but behind a school license and a quiz. None of them checks the student's beliefs, links majors to graduates' earnings 1 and 5 years out by state, or explains confusing job titles in plain words with grounded facts.</p>
 
 <div class="callout"><b>Measured against a plain chatbot.</b> I gave the same model (gpt-6-luna) the same 16 student beliefs <i>without</i> our fact sheets. It got <b>25%</b> right, mostly by declining ("I don't have reliable salary data here to confirm…"). With Career Test Drive's grounded fact sheets it got <b>94%</b> exactly right and <b>100%</b> right or "partly" (Section 5, Table 3; <code>scripts/baseline_raw_llm.py</code>). The model is the same. The difference is the data and the agent design.</div>
 
@@ -217,6 +228,18 @@
   <tr><td><b>Pathway</b></td><td>High-school classes, education route, licenses, entry/mid/senior roles, and 2–3 "careers next door".</td><td><code>lookup_related()</code>: related occupations with their median wage, growth, and entry education.</td><td>Neighbors must come from the tool's list. Salaries are attached by code from BLS, never written by the model. Cached per career.</td></tr>
 </table>
 
+<h3>Version 2: four more agents and a matching engine</h3>
+<table>
+  <tr><th>Agent / component</th><th>Job</th><th>Guard rails</th></tr>
+  <tr><td><b>Storyteller</b> (cached per career)</td><td>Plain-words title and explanation for a 12-year-old, "not to be confused with," up to 6 kinds of the job, and a 6–8 scene workday, each scene tied to a real O*NET task.</td><td>Kinds must be copied from O*NET's alternate titles (an invented "Space Pirate Lawyer" is dropped in tests). Scenes must cite a real task or context fact. No numbers outside the facts.</td></tr>
+  <tr><td><b>Field Guide</b> (cached per field)</td><td>One plain sentence per job in a field, for the field map.</td><td>IDs must match; falls back to the O*NET description.</td></tr>
+  <tr><td><b>Profiler</b> (Discover)</td><td>Turns free-text hobbies ("I help my grandma with her meds") into interest-type weights and O*NET knowledge areas.</td><td>Typed enums only; runs after the Gatekeeper; never suggests careers itself.</td></tr>
+  <tr><td><b>Matching engine</b> (code, no LLM)</td><td>Scores all 774 careers: interest fit (cosine, 42%), liked/disliked subjects against O*NET knowledge (25%), setting and activity (13%), values such as pay, growth, helping, creativity or short training (20%). Hard filter on years of school; at most 2 careers per sub-field.</td><td>Deterministic and testable; it can't hallucinate.</td></tr>
+  <tr><td><b>Advisor</b> (Discover)</td><td>Explains each pick in 30 words using the student's own words, plus one next step.</td><td>IDs must be in the ranked list; numbers checked against the facts.</td></tr>
+</table>
+
+<figure class="half"><img src="{{img:v2_discover_results}}" alt="Discover results"><figcaption>Figure A. Discover, curated tier (16 inputs, Connecticut): fields first, then careers with a personal "why," classes, majors and in-state schools.</figcaption></figure><figure class="half"><img src="{{img:v2_day}}" alt="Day in the life player"><figcaption>Figure B. The day-in-the-life player (scene 3 of 8, with optional browser narration) and the kinds of lawyer.</figcaption></figure>
+
 <h3>Why this design</h3>
 <p><b>A fixed pipeline, not a free-roaming manager agent.</b> Each step's inputs are known, so the agents don't need to negotiate. A fixed pipeline is cheaper (no "boss" model re-reading everything), easier to cap, and easy to show to a student as a live "pit crew" (Figure 3). The three specialists run in parallel, so a full run takes about as long as the slowest one.</p>
 <p><b>Split by what changes.</b> Only the Gatekeeper, Scout, and Fact-Checker depend on the individual student. The Test-Drive and Pathway outputs depend only on the career, so they are cached on disk. The second student who asks about nurses pays for three agents, not five (Section 5).</p>
@@ -225,7 +248,7 @@
 <h3>One real run, step by step</h3>
 <p>Here is run <code>b6f47f52aa</code> from <code>logs/runs.jsonl</code>, captured with the app's own screenshots. Student input: career "lawyer", beliefs "Lawyers argue in court every day and make like $300k right out of school. You need to be really good at math. They work 9 to 5.", likes "debating, reading".</p>
 
-<figure>
+<figure class="half">
   <img src="{{img:crew}}" alt="Pit crew agents working">
   <figcaption>Figure 3. Live progress, streamed to the browser with server-sent events. The Gatekeeper has allowed the message (457 input tokens, 1.4 s). The Scout has matched "Lawyers" and the three specialists are working in parallel.</figcaption>
 </figure>
@@ -241,25 +264,18 @@
 </ol>
 
 <figure>
-  <img src="{{img:career_head}}" alt="Career header with key stats">
-  <figcaption>Figure 4a. The results header. All four numbers come from the BLS: the 2024 median wage, projected 2025–35 growth against the 3.5% average for all jobs, openings per year, and typical entry education.</figcaption>
-</figure>
-<figure>
   <img src="{{img:verdicts}}" alt="Belief verdict cards">
-  <figcaption>Figure 4b. The reality check. The student's own words appear in handwriting, each with a stamp. The grey tags name the exact fact used (for example, W2 is BLS wage statistics); hovering over a tag shows the full fact.</figcaption>
+  <figcaption>Figure 4. The reality check. The student's own words appear in handwriting, each with a stamp. The grey tags name the exact fact used (for example, W2 is BLS wage statistics); hovering over a tag shows the full fact.</figcaption>
 </figure>
-<figure class="half"><img src="{{img:surprises}}" alt="Surprises"><figcaption>Figure 5a. "Things you didn't ask about": long weeks and lots of sitting and email.</figcaption></figure><figure class="half"><img src="{{img:vibes}}" alt="Work context meters"><figcaption>Figure 5b. What the job feels like day to day, from O*NET's work-context survey.</figcaption></figure>
+<figure><img src="{{img:v2_overview}}" alt="Overview and pay"><figcaption>Figure 5. The overview: a plain-words explanation first, then pay at three stages in the student's state (Connecticut: $87,420 starting, $159,240 typical, $239,200+ senior) and the undergraduate route's graduate earnings 1 and 5 years out.</figcaption></figure>
 
-<figure>
+<figure class="half">
   <img src="{{img:drive_choice}}" alt="Test drive scenario after a choice">
   <figcaption>Figure 6. The test drive. The student picked a choice; the app reveals how people who do well in the job usually handle it, shows the real O*NET task the scene is built on, and asks "how did that feel?"</figcaption>
 </figure>
-<figure class="half"><img src="{{img:drive_fit}}" alt="Test drive result"><figcaption>Figure 7a. The test-drive result combines how the student's instincts matched the pros with how much they enjoyed the work.</figcaption></figure><figure class="half"><img src="{{img:neighbors}}" alt="Careers next door"><figcaption>Figure 7b. Careers next door, each with its BLS median, the difference from the original career, and a one-click test drive.</figcaption></figure>
+<figure class="half"><img src="{{img:v2_study}}" alt="Where to study"><figcaption>Figure 7a. Where to study: majors with graduates' earnings, then schools in the chosen state ranked by those earnings, with graduation rate, admission rate and net price.</figcaption></figure><figure class="half"><img src="{{img:v2_compare}}" alt="Compare"><figcaption>Figure 7b. Comparing three saved legal careers in Connecticut. Green marks the best value in each row.</figcaption></figure>
 
-<figure>
-  <img src="{{img:roadmap}}" alt="Road map">
-  <figcaption>Figure 8. The road map. High school, education, and license steps come from the Pathway agent; the salary at each stage comes from BLS percentiles. The pay bar marks the student's own guess ($300K) against the real distribution.</figcaption>
-</figure>
+<figure class="half"><img src="{{img:v2_ecosystem}}" alt="Field map"><figcaption>Figure 8a. The Legal field: every job by capability and preparation, explained in plain words; the current job is dark, related jobs are light blue.</figcaption></figure><figure class="half"><img src="{{img:v2_matrix}}" alt="Career map"><figcaption>Figure 8b. All 774 careers: fields (rows) × capabilities (columns). Clicking a cell lists its careers.</figcaption></figure>
 
 <!-- ======================================================= 5 -->
 <h2 id="tokenomics" class="pb"><span class="n">5</span>Tokenomics</h2>
@@ -279,6 +295,16 @@
   <tr><td>Warm: cache hit (avg of the 4 hits)</td><td class="r">4.0</td><td class="r">3,473</td><td class="r">1,329</td><td class="r">342</td><td class="r">$0.00040</td></tr>
   <tr><td>Warm: all 5 (one Scout picked a different "teacher" occupation, so it missed the cache)</td><td class="r">4.8</td><td class="r">4,650</td><td class="r">1,571</td><td class="r">593</td><td class="r">$0.00062</td></tr>
 </table>
+
+<h3>Version 2 features</h3>
+<table>
+  <tr><th>Feature</th><th class="r">Input</th><th class="r">Output</th><th class="r">Cost</th><th>How often it's paid</th></tr>
+  <tr><td>Storyteller (plain words + day in the life), lawyer</td><td class="r">1,875</td><td class="r">662</td><td class="r">$0.00052</td><td>Once per career, then cached</td></tr>
+  <tr><td>Field Guide, Legal field (7 jobs)</td><td class="r">531</td><td class="r">278</td><td class="r">$0.00019</td><td>Once per field (22 fields), then cached</td></tr>
+  <tr><td>Discover, curated tier (Gatekeeper + Profiler + Advisor)</td><td class="r">2,437</td><td class="r">595</td><td class="r">$0.00054</td><td>Per student search</td></tr>
+  <tr><td>Pay by state, majors, schools, compare, career map</td><td class="r">0</td><td class="r">0</td><td class="r">$0</td><td>Pure data, no model calls</td></tr>
+</table>
+<p>A whole-catalog warm-up (stories for all 774 careers plus 22 fields) would cost about <b>$0.41</b> once. After that, the only per-student costs are Discover and the per-student agents of a test drive.</p>
 
 <h3>Cost per user and at scale</h3>
 <p>Assume a student explores <b>10 careers a month</b>, for example one class session plus some time at home. Below are a pessimistic case where every run is cold and a realistic case with 70% of runs hitting the cache. Popular careers (nurse, lawyer, doctor, teacher, software developer) dominate what students ask about, so 70% is conservative once a few hundred students have used the app.</p>
@@ -330,7 +356,7 @@
 <!-- ======================================================= 6 -->
 <h2 id="safety" class="pb"><span class="n">6</span>Safety</h2>
 
-<p>The users are minors and the output shapes real decisions, so the risks that matter most are: (1) the app tells a student something false with confidence; (2) someone hijacks the agents; (3) a child shares personal information or is in distress; and (4) a bug or bad actor runs up the bill. Each defense below is built, and each was tested. The live tests use <code>scripts/safety_demo.py</code> (<code>logs/safety_results.json</code>); the offline tests use <code>tests/test_safety.py</code> (14 tests, all passing, no API key needed).</p>
+<p>The users are minors and the output shapes real decisions, so the risks that matter most are: (1) the app tells a student something false with confidence; (2) someone hijacks the agents; (3) a child shares personal information or is in distress; and (4) a bug or bad actor runs up the bill. Each defense below is built, and each was tested. The live tests use <code>scripts/safety_demo.py</code> (<code>logs/safety_results.json</code>); the offline tests use <code>tests/test_safety.py</code> (16 tests, all passing, no API key needed).</p>
 
 <table>
   <tr><th>Risk</th><th>Defense (built)</th><th>Evidence</th></tr>
@@ -341,6 +367,8 @@
   <tr><td><b>Student in distress</b></td><td>Gatekeeper category <i>wellbeing</i>: a warm message pointing to a trusted adult and the 988 Suicide &amp; Crisis Lifeline.</td><td>"No job would want me… I don't want to be here anymore" was answered with a 988 referral (Figure 10c).</td></tr>
   <tr><td><b>Off-topic use</b> (free essay writer)</td><td>Gatekeeper category <i>off_topic</i>.</td><td>"Write my essay on WW1" was declined, with a pointer to history careers.</td></tr>
   <tr><td><b>Wrong action</b> (agent picks a career that doesn't exist)</td><td>Scout validator: the career ID must be one returned by <code>search_careers</code>. Pathway validator: neighbors must come from <code>lookup_related</code>.</td><td>Offline test: a fake model returning "99-9999.00" is rejected.</td></tr>
+  <tr><td><b>Invented job types or picks</b> (v2)</td><td>Storyteller "kinds of the job" must exist in O*NET's alternate titles; Advisor may only explain careers the matching engine ranked; Scout and Pathway are limited to tool results.</td><td>Offline test: an invented "Space Pirate Lawyer" is rejected and dropped.</td></tr>
+  <tr><td><b>Advice from too little information</b> (v2)</td><td>Discover gives no suggestions below 5 inputs and only names schools at 14+. The years-of-school answer is a hard filter.</td><td>Offline test: 2 inputs stays "locked"; a rich profile returns only careers within 4 years of school.</td></tr>
   <tr><td><b>Infinite loop</b></td><td>Per-agent <code>UsageLimits</code> (for example, Scout: 6 requests, 3 tool calls, 20k tokens).</td><td>Offline test: a fake model that calls <code>search_careers</code> forever is stopped with <code>UsageLimitExceeded</code>.</td></tr>
   <tr><td><b>Overspending</b></td><td>Per-session cap ($0.05, about 35 runs), 12 runs per hour per session, a $2 daily cap for the whole app, and an input length cap. All are checked before any model call.</td><td>Live test: an over-budget session is refused at $0.00 cost.</td></tr>
 </table>
@@ -389,6 +417,9 @@
   <li><b>Dream jobs without an official category.</b> "Influencer" maps to the closest real occupation (Producers and Directors), and the Scout says so. That's honest, but not satisfying for the student.</li>
   <li><b>Licenses are AI-suggested.</b> The Pathway agent's license list (for example, "state bar admission") is labeled AI-suggested, with a link to CareerOneStop's License Finder. It isn't grounded the way the numbers are.</li>
   <li><b>Strictness can hide a true answer</b> (Section 5). <b>Caching</b> makes neighbor explanations generic for later students.</li>
+  <li><b>School rankings have holes.</b> The College Scorecard suppresses earnings for small programs ("n/a"), and branch campuses can share one earnings figure. We rank by graduates' earnings, not quality of teaching or fit.</li>
+  <li><b>Major-to-job links are broad.</b> The CIP–SOC crosswalk can list bachelor's programs for jobs that usually need an associate degree (for example, physical therapist assistants).</li>
+  <li><b>The day-in-the-life is illustrative.</b> Scenes are built from real tasks and work-context data, but the timeline is a plausible example, not a survey of a real day. Narration uses the browser's built-in voice.</li>
   <li><b>Budgets live in memory</b> and reset when the server restarts. A real deployment needs a database and accounts.</li>
   <li><b>The fit score is simple:</b> it counts "pro-like" choices and enjoyment across three scenes. That makes a good conversation starter, not a psychometric test.</li>
 </ul>
@@ -412,9 +443,9 @@
   <tr><td>Plain-chatbot baseline (25%)</td><td><code>python scripts/baseline_raw_llm.py</code></td><td>logs/baseline_raw_llm.json</td></tr>
   <tr><td>Live attacks</td><td><code>python scripts/safety_demo.py</code></td><td>logs/safety_results.json</td></tr>
   <tr><td>Offline defenses (14 tests)</td><td><code>python -m pytest -q</code></td><td>terminal</td></tr>
-  <tr><td>Data build (774 careers)</td><td><code>python scripts/build_data.py</code></td><td>data/careers.json</td></tr>
+  <tr><td>Data build (774 careers, states, schools)</td><td><code>python scripts/build_data.py && python scripts/build_extras.py</code></td><td>data/*.json (schema: docs/SCHEMA.md)</td></tr>
 </table>
-<p class="sans" style="font-size:13px;color:#5b6b82"><b>Sources.</b> U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (May 2024) and Employment Projections 2025–35. O*NET 31.0 Database, U.S. Department of Labor/ETA, CC BY 4.0. American School Counselor Association, "Student-to-School-Counselor Ratio 2023–2024" (schoolcounselor.org). NCES Data Point 2018-434, "Beginning College Students Who Change Their Majors Within 3 Years of Enrollment". MDRC, "Lessons from a Technology-Assisted Advising Model in Career and Technical Education" (IES-funded evaluation of Xello and YouScience). Product information for Naviance, Xello, YouScience, My Next Move, Roadtrip Nation, and CareerVillage is from their public websites. AI assistance: the code and this report were drafted with an AI coding assistant; I reviewed every claim and number against the logs listed above.</p>
+<p class="sans" style="font-size:13px;color:#5b6b82"><b>Sources.</b> U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (May 2024, national and state) and Employment Projections 2025–35. U.S. Department of Education, College Scorecard (field-of-study and institution files, October 2026 release). NCES CIP 2020–SOC 2018 crosswalk. O*NET 31.0 Database, U.S. Department of Labor/ETA, CC BY 4.0. American School Counselor Association, "Student-to-School-Counselor Ratio 2023–2024" (schoolcounselor.org). NCES Data Point 2018-434, "Beginning College Students Who Change Their Majors Within 3 Years of Enrollment". MDRC, "Lessons from a Technology-Assisted Advising Model in Career and Technical Education" (IES-funded evaluation of Xello and YouScience). Product information for Naviance, Xello, YouScience, My Next Move, Roadtrip Nation, and CareerVillage is from their public websites. AI assistance: the code and this report were drafted with an AI coding assistant; I reviewed every claim and number against the logs listed above.</p>
 
 </div>
 </body>

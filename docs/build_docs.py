@@ -22,7 +22,7 @@ def data_uri(name: str, width: int = 1600) -> str:
 def build(src: str, dst: str) -> None:
     html = (DOCS / src).read_text(encoding="utf-8")
     cache: dict[str, str] = {}
-    html = re.sub(r"\{\{img:([a-z_]+)\}\}", lambda m: cache.setdefault(m.group(1), data_uri(m.group(1))), html)
+    html = re.sub(r"\{\{img:([a-z0-9_]+)\}\}", lambda m: cache.setdefault(m.group(1), data_uri(m.group(1))), html)
     (ROOT / dst).write_text(html, encoding="utf-8")
     print(dst, f"{len(html) / 1e6:.1f} MB, {len(cache)} images")
 
