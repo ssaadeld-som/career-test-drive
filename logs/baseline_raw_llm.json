@@ -1,0 +1,125 @@
+{
+ "exact_accuracy": 0.25,
+ "explanations_with_unverified_numbers": 3,
+ "unverified_numbers": 3,
+ "rows": [
+  {
+   "claim": "Most lawyers start out making over $200,000.",
+   "expected": "myth",
+   "got": "no_data",
+   "explanation": "I don\u2019t have reliable salary data here to confirm what most new lawyers earn or whether they exceed $200,000. Starting pay can vary by location and employer.",
+   "numbers_not_in_official_data": [
+    "$200,000"
+   ]
+  },
+  {
+   "claim": "You need more school than just college to be a lawyer.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "I don\u2019t have jurisdiction-specific licensing facts here to verify the required education. Lawyer training and licensing requirements vary by country and, in the U.S., by state.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Software developer jobs are growing faster than most jobs.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "No employment-growth figures are provided, so this claim can\u2019t be checked or compared with growth across other jobs.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Coders work super long weeks, way over 40 hours.",
+   "expected": "myth",
+   "got": "no_data",
+   "explanation": "No typical-hours figures are provided. Without them, there\u2019s no basis to say software developers usually work far more than 40 hours a week.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Electricians need a 4-year college degree.",
+   "expected": "myth",
+   "got": "myth",
+   "explanation": "Electricians typically learn through an apprenticeship combining paid on-the-job training and classroom instruction; requirements vary by location. No career-specific salary, growth, or hours figures were provided here.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Electricians make less than $30,000 a year.",
+   "expected": "myth",
+   "got": "no_data",
+   "explanation": "No salary figures or location were provided, so I can\u2019t verify whether electricians earn below $30,000 a year. Pay varies with experience, specialty, and region.",
+   "numbers_not_in_official_data": [
+    "$30,000"
+   ]
+  },
+  {
+   "claim": "Nurses have to deal with upset people a lot.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "Nurses often interact with patients and families during stressful situations, so upset people may be part of the job. But no figures here show how often nurses encounter them.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Vets only need a bachelor's degree.",
+   "expected": "myth",
+   "got": "myth",
+   "explanation": "In the United States, veterinarians generally need a Doctor of Veterinary Medicine (DVM or VMD) degree and a state license. A bachelor\u2019s degree may help with prerequisites, but it does not qualify someone to practice as a veterinarian.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Chefs usually work long weeks, more than 40 hours.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "No work-hours figures were provided, so I can\u2019t verify whether chefs usually work more than 40 hours a week.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Half of airline pilots make over $200,000.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "I don\u2019t have a cited salary figure here to verify whether half of airline pilots earn over $200,000.",
+   "numbers_not_in_official_data": [
+    "$200,000"
+   ]
+  },
+  {
+   "claim": "Teachers have an easy schedule, under 40 hours a week.",
+   "expected": "myth",
+   "got": "no_data",
+   "explanation": "I don\u2019t have reliable work-hours figures for elementary school teachers here, so I can\u2019t confirm whether their schedule is under 40 hours weekly\u2014or whether it feels easy.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Graphic design jobs are booming.",
+   "expected": "myth",
+   "got": "no_data",
+   "explanation": "I don\u2019t have verified employment-growth figures here, so I can\u2019t tell whether graphic design jobs are booming. Check your country\u2019s labor statistics for projected growth and typical pay before deciding.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Pro athletes are all rich.",
+   "expected": "myth",
+   "got": "myth",
+   "explanation": "Athlete pay varies enormously by sport, league, and performance; many earn modest or short-lived incomes. No specific salary figure is available here, so \u201call rich\u201d is not supported.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Dental hygienists need a 4-year degree.",
+   "expected": "myth",
+   "got": "myth",
+   "explanation": "In the U.S., dental hygienists typically need an associate degree, which usually takes about 3 years. Some earn bachelor\u2019s degrees, but that is not the usual entry-level requirement.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Police officers spend a lot of time outdoors.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "Patrol officers may work outside during calls and patrols, but they also spend time in vehicles and stations. I don\u2019t have a reliable figure for the share of their workday spent outdoors.",
+   "numbers_not_in_official_data": []
+  },
+  {
+   "claim": "Accountants sit at a desk most of the day.",
+   "expected": "true",
+   "got": "no_data",
+   "explanation": "Accountants typically work in offices using computers, but the available facts give no number for how much of the day they spend seated or at a desk.",
+   "numbers_not_in_official_data": []
+  }
+ ]
+}
