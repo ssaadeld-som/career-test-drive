@@ -81,8 +81,9 @@
     <h1>Career Test Drive</h1>
     <p class="one">A multi-agent app that helps students aged 12–18 who know little about careers find ones that fit them, bust their myths with official government data, "test-drive" the job, and see the majors, schools and pay in their own state before they apply.</p>
     <div class="meta">
-      <b>Author:</b> <span style="background:#fff7d6;color:#8a5a00;padding:0 6px;border-radius:4px">[YOUR NAME]</span>, Yale SOM<br>
-      <b>GitHub repo:</b> <a href="https://github.com/ssaadeld-som/career-test-drive">github.com/ssaadeld-som/career-test-drive</a> (private; zlisto invited)<br>
+      <b>Author:</b> ssaadeld-som, Yale SOM<br>
+      <b>GitHub repo:</b> <a href="https://github.com/ssaadeld-som/career-test-drive">https://github.com/ssaadeld-som/career-test-drive</a> (public)<br>
+      <b>Clone:</b> <code>git clone https://github.com/ssaadeld-som/career-test-drive.git</code><br>
       <b>App:</b> runs locally from a fresh clone. See the README (<code>pip install -r requirements.txt</code>, then <code>python app.py</code>, then open http://127.0.0.1:8000)<br>
       <b>Model:</b> gpt-6-luna via the course Portkey key · <b>Date:</b> October 26, 2026
     </div>
@@ -138,7 +139,7 @@
   <li><b>Every number is verified.</b> Agents only see a numbered fact sheet, and a validator rejects any number they write that is not in it. ChatGPT cannot make that promise.</li>
 </ol>
 
-<p><b>A practical layer students and parents asked for.</b> Early testers told us the first version was "fancy but not very practical." Version 2 adds the information a student actually needs to choose a school and a program:</p>
+<p><b>A practical layer students and parents asked for.</b> Reviewing the first version as a student would, I found it "fancy but not very practical." Version 2 adds the information a student actually needs to choose a school and a program:</p>
 <ul>
   <li><b>Discover mode</b> for students who know almost nothing. They pick strengths, hobbies, liked and disliked subjects, values and how many years of school they'd do. Suggestions unlock gradually: nothing below 5 inputs, fields at 5, specific careers at 9, careers plus majors and schools in their state at 14. We never suggest a career from one or two inputs.</li>
   <li><b>Pay in your state</b> at three stages (starting, typical, senior) from BLS state data, plus the <b>1-year and 5-year earnings of graduates of the related majors</b> from the College Scorecard. That answers "what will I make after college, and five years later?" with real data.</li>
@@ -156,7 +157,7 @@
 <!-- ======================================================= 4 -->
 <h2 id="agents" class="pb"><span class="n">4</span>The agents</h2>
 
-<p>The app has five agents built with PydanticAI on <b>gpt-6-luna</b>. Each one has a single job, a typed output (no free text to parse), a hard usage cap, and only the tools it needs.</p>
+<p>The app has nine agents built with PydanticAI on <b>gpt-6-luna</b>: five in the per-student test-drive pipeline described here, and four added in version 2 (below). Each one has a single job, a typed output (no free text to parse), a hard usage cap, and only the tools it needs.</p>
 
 <figure>
 <svg viewBox="0 0 860 430" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Helvetica, Arial, sans-serif" role="img" aria-label="Agent architecture diagram">
@@ -394,16 +395,8 @@
 </table>
 
 <h3>Real users</h3>
-<div class="todo">
-  <b>FILL IN BEFORE SUBMITTING. Replace this box with your pilot-user results.</b> Ask 2–4 people (classmates, or better, a classmate's younger sibling or cousin aged 12–18) to use the app for 10 minutes on a career they once considered. The in-app feedback form saves to <code>logs/feedback.jsonl</code>. It records whether the app changed their view, how sure they were about the career before and after (0–10), and what surprised them. Report:
-  <ul>
-    <li>Who they were (role/age only, no names), and the career each one tried.</li>
-    <li>Before → after certainty, and how many beliefs were busted.</li>
-    <li>One or two direct quotes ("I had no idea…"), plus a screenshot of a session.</li>
-    <li>Time: how long it took them versus how long they think it would take to find the same facts on the BLS site.</li>
-  </ul>
-  Write only what actually happened.
-</div>
+<div class="callout"><b>Honest status: no pilot with real students yet.</b> The deadline left no time to run sessions with students aged 12–18, so I can't report before/after results from real users, and I won't estimate them. What exists is the instrument for that pilot. The app is live behind a shareable link, and every results page ends with an anonymous feedback form (did this change your view; certainty about the career before and after, 0–10; what surprised you). Answers are saved to <code>logs/feedback.jsonl</code> together with the student's test-drive fit score. The evidence in this report comes from controlled tests: the 16-belief benchmark, the plain-chatbot baseline, 15 measured runs and the live attack suite.</div>
+<p><b>Planned pilot (first next step):</b> 10 students in one advisory period. Each writes down what they believe about a career they're considering, uses the app for 10 minutes, then answers the feedback form. The outcomes are the share of beliefs corrected, the change in certainty, and the time compared with finding the same facts on the BLS site (we would time both).</p>
 
 <h3>Where these numbers come from, and how much to trust them</h3>
 <p>Accuracy and cost come from my own controlled tests, and every one can be re-run with the scripts in the repo. The counselor ratio is from ASCA's analysis of NCES data (2023–24). Major-switching is from NCES's Beginning Postsecondary Students study (2011–12 cohort through 2014). I don't claim the app reduces major-switching. That would need a long-term study, and the MDRC evaluation of school career tools is a reminder that information alone may not change behavior. That is why this app is designed around the student's own beliefs and an experiential test drive rather than more information pages.</p>
