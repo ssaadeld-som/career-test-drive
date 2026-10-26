@@ -357,7 +357,7 @@
 <!-- ======================================================= 6 -->
 <h2 id="safety" class="pb"><span class="n">6</span>Safety</h2>
 
-<p>The users are minors and the output shapes real decisions, so the risks that matter most are: (1) the app tells a student something false with confidence; (2) someone hijacks the agents; (3) a child shares personal information or is in distress; and (4) a bug or bad actor runs up the bill. Each defense below is built, and each was tested. The live tests use <code>scripts/safety_demo.py</code> (<code>logs/safety_results.json</code>); the offline tests use <code>tests/test_safety.py</code> (16 tests, all passing, no API key needed).</p>
+<p>The users are minors and the output shapes real decisions, so the risks that matter most are: (1) the app tells a student something false with confidence; (2) someone hijacks the agents; (3) a child shares personal information or is in distress; and (4) a bug or bad actor runs up the bill. Each defense below is built, and each was tested. The live tests use <code>scripts/safety_demo.py</code> (<code>logs/safety_results.json</code>); the offline tests use <code>tests/test_safety.py</code> (17 tests, all passing, no API key needed).</p>
 
 <table>
   <tr><th>Risk</th><th>Defense (built)</th><th>Evidence</th></tr>
@@ -435,7 +435,7 @@
   <tr><td>Accuracy of 4 configurations</td><td><code>python scripts/eval_cost_quality.py</code></td><td>logs/eval_results.json</td></tr>
   <tr><td>Plain-chatbot baseline (25%)</td><td><code>python scripts/baseline_raw_llm.py</code></td><td>logs/baseline_raw_llm.json</td></tr>
   <tr><td>Live attacks</td><td><code>python scripts/safety_demo.py</code></td><td>logs/safety_results.json</td></tr>
-  <tr><td>Offline defenses (14 tests)</td><td><code>python -m pytest -q</code></td><td>terminal</td></tr>
+  <tr><td>Offline defenses (17 tests)</td><td><code>python -m pytest -q</code></td><td>terminal</td></tr>
   <tr><td>Data build (774 careers, states, schools)</td><td><code>python scripts/build_data.py && python scripts/build_extras.py</code></td><td>data/*.json (schema: docs/SCHEMA.md)</td></tr>
 </table>
 <p class="sans" style="font-size:13px;color:#5b6b82"><b>Sources.</b> U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (May 2024, national and state) and Employment Projections 2025–35. U.S. Department of Education, College Scorecard (field-of-study and institution files, October 2026 release). NCES CIP 2020–SOC 2018 crosswalk. O*NET 31.0 Database, U.S. Department of Labor/ETA, CC BY 4.0. American School Counselor Association, "Student-to-School-Counselor Ratio 2023–2024" (schoolcounselor.org). NCES Data Point 2018-434, "Beginning College Students Who Change Their Majors Within 3 Years of Enrollment". MDRC, "Lessons from a Technology-Assisted Advising Model in Career and Technical Education" (IES-funded evaluation of Xello and YouScience). Product information for Naviance, Xello, YouScience, My Next Move, Roadtrip Nation, and CareerVillage is from their public websites. AI assistance: the code and this report were drafted with an AI coding assistant; I reviewed every claim and number against the logs listed above.</p>

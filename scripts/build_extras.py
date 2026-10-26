@@ -77,16 +77,18 @@ CRED = {"1": "Certificate", "2": "Associate", "3": "Bachelor's"}
 
 def money(v):
     try:
-        return int(float(v))
+        f = float(v)
     except (TypeError, ValueError):
         return None
+    return None if f != f else int(f)  # NaN -> None (JSON has no NaN)
 
 
 def frac(v):
     try:
-        return round(float(v), 3)
+        f = float(v)
     except (TypeError, ValueError):
         return None
+    return None if f != f else round(f, 3)
 
 
 def main() -> None:
@@ -186,7 +188,7 @@ def main() -> None:
             states[r.OCC_CODE][r.PRIM_STATE] = [p10, med, p90, money(r.TOT_EMP), frac(r.LOC_QUOTIENT)]
     names = st.drop_duplicates("PRIM_STATE").set_index("PRIM_STATE")["AREA_TITLE"].to_dict()
     (DATA / "states.json").write_text(json.dumps({"names": {k: v for k, v in names.items() if k not in ("PR", "VI", "GU")},
-                                                   "wages": states}, separators=(",", ":")))
+                                                   "wages": states}, separators=(",", ":"), allow_nan=False))
 
     # ---------------- schools (only programs for majors we reference)
     prog = fos[fos.CIPCODE.isin(used_cips) & fos.UNITID.isin(inst.UNITID)]
@@ -196,7 +198,7 @@ def main() -> None:
     keep = {p[0] for v in programs.values() for p in v}
     insts = {}
     for r in inst[inst.UNITID.isin(keep)].itertuples(index=False):
-        grad = frac(r.C150_4) if r.C150_4 not in (None, "", "NULL") and r.C150_4 == r.C150_4 else frac(r.C150_L4)
+        grad = frac(r.C150_4) if frac(r.C150_4) is not None else frac(r.C150_L4)
         net = money(r.NPT4_PUB) or money(r.NPT4_PRIV)
         insts[r.UNITID] = [r.INSTNM, r.CITY, r.STABBR, (r.INSTURL or "").split("/")[0], int(r.CONTROL), frac(r.ADM_RATE),
                            grad, net, money(r.UGDS)]
@@ -204,7 +206,7 @@ def main() -> None:
         "inst": ["name", "city", "state", "url", "control(1=public,2=private nonprofit,3=for-profit)", "admit_rate",
                  "grad_rate", "avg_net_price", "undergrads"],
         "program": ["unitid", "credential_level(1=cert,2=assoc,3=bach)", "grads_per_year", "earn_1yr", "earn_5yr"]},
-        "cip_titles": {k: cip_title.get(k, k) for k in used_cips}, "inst": insts, "programs": programs}, separators=(",", ":")))
+        "cip_titles": {k: cip_title.get(k, k) for k in used_cips}, "inst": insts, "programs": programs}, separators=(",", ":"), allow_nan=False))
 
     # ---------------- verticals index
     verts: dict = {}

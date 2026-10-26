@@ -151,3 +151,12 @@ def test_discovery_needs_enough_inputs():
     picks = extras.score_careers(rich)[:8]
     assert all(data.get(p["id"])["edu_years"] <= 4 for p in picks)          # respects the school-years limit
     assert any(p["vertical"] == "Computer and Mathematical" for p in picks)   # sensible field
+
+
+def test_api_payloads_are_valid_json_everywhere():
+    """Every state's school list and pay data must serialize (no NaN), or the API returns 500."""
+    from backend import extras
+    for cid in ("29-1141.00", "23-1011.00", "47-2111.00", "15-1252.00"):
+        for st in [None, *extras.states()["names"]]:
+            json.dumps(extras.top_schools(cid, st), allow_nan=False)
+            json.dumps(extras.profile(cid, st), allow_nan=False)

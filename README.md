@@ -121,7 +121,7 @@ Every field is documented in [docs/SCHEMA.md](docs/SCHEMA.md).
 ## Tests and experiments
 
 ```bash
-python -m pytest -q                      # 16 offline safety tests (no key, no cost)
+python -m pytest -q                      # 17 offline tests (no key, no cost)
 python scripts/safety_demo.py            # live attacks through the real pipeline
 python scripts/eval_cost_quality.py      # cost vs. accuracy of 4 Fact-Checker configurations
 python scripts/measure_runs.py           # 15 measured runs for tokenomics
