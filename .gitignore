@@ -14,3 +14,5 @@ logs/runs.jsonl
 logs/feedback.jsonl
 logs/last_run.json
 logs/dev_runs.jsonl
+docs/demo.webm
+docs/_video/
