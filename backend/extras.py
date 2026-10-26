@@ -99,7 +99,9 @@ def top_schools(career_id: str, state: str | None = None, levels: tuple[int, ...
     for m in c.get("majors", []):
         for unitid, lvl, grads, e1, e5 in s["programs"].get(m["cip"], []):
             inst = s["inst"].get(unitid)
-            if not inst or lvl not in levels or (state and inst[2] != state) or (control and inst[4] != control):
+            if not inst or lvl not in levels or (state and inst[2] != state):
+                continue
+            if (control in (1, 2, 3) and inst[4] != control) or (control is None and inst[4] == 3):  # default: no for-profits
                 continue
             key = (unitid, m["cip"], lvl)
             if key in seen:

@@ -150,7 +150,7 @@ def compare(ids: str, state: str | None = None):
 def schools(career: str, state: str | None = None, levels: str = "2,3", control: int | None = None,
             sort: str = "earnings", limit: int = 15):
     lv = tuple(int(x) for x in levels.split(",") if x in ("1", "2", "3")) or (2, 3)
-    return extras.top_schools(career, state or None, lv, control, sort, min(limit, 50))
+    return extras.top_schools(career, state or None, lv, control, sort, min(limit, 50))  # control=0 -> include for-profit
 
 
 @app.get("/api/matrix")
