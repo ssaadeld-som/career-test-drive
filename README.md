@@ -10,6 +10,17 @@ high-school classes to senior roles, with real salaries at every stage.
 Every number on screen comes from bundled government data. A grounding check rejects any number an agent
 invents before the student ever sees it.
 
+**What a student can do**
+- **Discover**: don't know what you want? Pick strengths, hobbies, favorite subjects, values and how much
+  school you'd do. Suggestions unlock and get more specific the more you share: fields at 5 inputs,
+  careers at 9, careers plus majors and schools in your state at 14.
+- **Test-drive a career**: myths vs. facts, an explanation in plain words, a narrated "day in the life," pay at the
+  start / typical / senior level **in your state**, college majors with graduates' earnings 1 and 5 years
+  out, schools that offer them, and a map of every job in the field.
+- **Compare**: save careers with ♡ and compare up to 4 side by side (pay, growth, education, majors,
+  high-school classes, skills, hours, work setting).
+- **Career map**: all 774 careers by field (rows) × the main capability used (columns).
+
 ![Career Test Drive](docs/hero.png)
 
 ---
@@ -84,6 +95,14 @@ student text
 * **Live telemetry.** The "Under the hood" panel shows each agent's tool calls, tokens (input, cached,
   output), time and cost for the run. Every run is appended to `logs/runs.jsonl`.
 
+Plus, outside the per-student pipeline:
+- **Storyteller agent** (cached per career): plain-words explanation, "not to be confused with," kinds of the
+  job (only names from O*NET's alternate titles), and a 6–8 scene day built on real tasks.
+- **Field Guide agent** (cached per field): one plain sentence per job for the field map.
+- **Profiler agent → matching engine → Advisor agent** (Discover): reads free-text hobbies into interest
+  types and knowledge areas, ranks 774 careers deterministically, then explains each pick with numbers
+  checked against the data.
+
 ## Data (all public, bundled)
 
 | Source | What we use | License |
@@ -91,14 +110,18 @@ student text
 | O*NET 31.0 database | tasks, work context, work styles, skills, interests, related jobs | CC BY 4.0 |
 | BLS OEWS, May 2024 | annual wage percentiles (10th–90th) | public domain |
 | BLS Employment Projections 2025–35 | growth, openings, entry education, training | public domain |
+| BLS OEWS state file, May 2024 | wages and employment by state | public domain |
+| College Scorecard (U.S. Dept. of Education) | majors, schools, graduates' earnings 1 and 5 yrs out, cost, grad rate | public domain |
+| NCES CIP 2020 – SOC 2018 crosswalk | links college majors to occupations | public domain |
 
-`data/careers.json` (3.3 MB) is pre-built and committed, so you don't need the raw files. To rebuild it,
-put the raw downloads in `data/raw/` and run `python scripts/build_data.py`.
+All processed files in `data/` (~11 MB) are pre-built and committed, so you don't need the raw files.
+To rebuild, put the raw downloads in `data/raw/` and run `python scripts/build_data.py && python scripts/build_extras.py`.
+Every field is documented in [docs/SCHEMA.md](docs/SCHEMA.md).
 
 ## Tests and experiments
 
 ```bash
-python -m pytest -q                      # 14 offline safety tests (no key, no cost)
+python -m pytest -q                      # 16 offline safety tests (no key, no cost)
 python scripts/safety_demo.py            # live attacks through the real pipeline
 python scripts/eval_cost_quality.py      # cost vs. accuracy of 4 Fact-Checker configurations
 python scripts/measure_runs.py           # 15 measured runs for tokenomics

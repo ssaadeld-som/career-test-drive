@@ -143,7 +143,7 @@ def main() -> None:
             "soc": soc,
             "title": row["Title"],
             "description": row["Description"],
-            "alt_titles": titles[titles["O*NET-SOC Code"] == code]["Job Title"].head(25).tolist(),
+            "alt_titles": titles[titles["O*NET-SOC Code"] == code]["Job Title"].head(150).tolist(),
             "tasks": t["Task"].head(14).tolist(),
             "work_styles": styles[styles["O*NET-SOC Code"] == code].nlargest(6, "v")["Element Name"].tolist(),
             "skills": skills[skills["O*NET-SOC Code"] == code].nlargest(6, "v")["Element Name"].tolist(),

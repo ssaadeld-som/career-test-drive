@@ -22,7 +22,8 @@ from pydantic_ai.usage import UsageLimits
 from backend import data
 from backend.config import MODEL_NAME, PROMPTS, build_model, model_settings
 from backend.grounding import allowed_numbers, unsupported
-from backend.models import GateDecision, Pathway, RealityCheck, ScoutResult, TestDrive
+from backend.models import (Advice, FieldGuide, GateDecision, Pathway, ProfileRead, RealityCheck, ScoutResult,
+                            Story, TestDrive)
 from backend.pricing import cost_usd
 
 LIMITS = {
@@ -31,6 +32,10 @@ LIMITS = {
     "Fact-Checker": UsageLimits(request_limit=3, total_tokens_limit=20_000),
     "Test-Drive": UsageLimits(request_limit=3, total_tokens_limit=24_000),
     "Pathway": UsageLimits(request_limit=4, tool_calls_limit=2, total_tokens_limit=24_000),
+    "Storyteller": UsageLimits(request_limit=3, total_tokens_limit=24_000),
+    "Field Guide": UsageLimits(request_limit=3, total_tokens_limit=40_000),
+    "Profiler": UsageLimits(request_limit=2, total_tokens_limit=6_000),
+    "Advisor": UsageLimits(request_limit=3, total_tokens_limit=24_000),
 }
 
 
@@ -181,6 +186,69 @@ def _pw_ok(ctx: RunContext[CareerDeps], out: Pathway) -> Pathway:
     return out
 
 
+# ---------------------------------------------------------------- Storyteller (plain words + day-in-the-life)
+storyteller = Agent(deps_type=CareerDeps, output_type=Story, name="Storyteller", retries=1)
+
+
+@storyteller.instructions
+def _st_instructions(ctx: RunContext[CareerDeps]) -> str:
+    c = ctx.deps.career
+    return (prompt("storyteller").replace("{title}", c["title"]).replace("{facts}", data.render(ctx.deps.facts))
+            .replace("{alt_titles}", "; ".join(c["alt_titles"])))
+
+
+@storyteller.output_validator
+def _st_ok(ctx: RunContext[CareerDeps], out: Story) -> Story:
+    alts = {a.lower() for a in ctx.deps.career["alt_titles"]}
+    problems = [f"specialization '{s.name}' is not in ALT_TITLES" for s in out.specializations if s.name.lower() not in alts]
+    small = set(map(float, range(0, 13)))
+    for sc in out.scenes:
+        if sc.task_id not in ctx.deps.fact_ids:
+            problems.append(f"scene '{sc.title}' uses unknown fact id {sc.task_id}")
+        bad = unsupported(sc.narration, ctx.deps.allowed | small)
+        if bad:
+            problems.append(f"scene '{sc.title}' has numbers not in FACTS: {bad}")
+    bad = unsupported(out.eli12 + " " + out.not_to_confuse, ctx.deps.allowed | small)
+    if bad:
+        problems.append(f"explanation has numbers not in FACTS: {bad}")
+    if problems and ctx.retry < 1:
+        ctx.deps.rejections.extend(problems)
+        raise ModelRetry("Fix these:\n" + "\n".join(problems))
+    out.specializations = [s for s in out.specializations if s.name.lower() in alts]
+    return out
+
+
+# ---------------------------------------------------------------- Field Guide (plain words for a whole field)
+field_guide = Agent(output_type=FieldGuide, name="Field Guide", retries=1)
+
+# ---------------------------------------------------------------- Profiler + Advisor (discovery mode)
+profiler = Agent(output_type=ProfileRead, instructions=prompt("profiler"), name="Profiler")
+
+
+@dataclass
+class AdviceDeps:
+    ids: set[str]
+    allowed: set[float]
+    rejections: list[str] = field(default_factory=list)
+
+
+advisor = Agent(deps_type=AdviceDeps, output_type=Advice, name="Advisor", retries=1)
+
+
+@advisor.output_validator
+def _adv_ok(ctx: RunContext[AdviceDeps], out: Advice) -> Advice:
+    problems = [f"unknown id {p.id}" for p in out.picks if p.id not in ctx.deps.ids]
+    for p in out.picks:
+        bad = unsupported(p.why, ctx.deps.allowed)
+        if bad:
+            problems.append(f"'{p.id}' numbers not in FACTS: {bad}")
+    if problems and ctx.retry < 1:
+        ctx.deps.rejections.extend(problems)
+        raise ModelRetry("Fix these:\n" + "\n".join(problems))
+    out.picks = [p for p in out.picks if p.id in ctx.deps.ids and not unsupported(p.why, ctx.deps.allowed)]
+    return out
+
+
 # ---------------------------------------------------------------- runner
 def trace_of(messages) -> list[dict]:
     """Readable step list (tool calls, tool results, retries) for the UI's 'under the hood' panel."""
@@ -200,11 +268,11 @@ def trace_of(messages) -> list[dict]:
 
 
 async def run_agent(agent: Agent, name: str, user_prompt: str, deps=None, effort: str | None = None,
-                    cache_key: str | None = None) -> tuple[object, dict]:
+                    cache_key: str | None = None, instructions: str | None = None) -> tuple[object, dict]:
     started = time.perf_counter()
     settings = model_settings(effort, cache_key) if effort else model_settings(cache_key=cache_key)
-    result = await agent.run(user_prompt, deps=deps, model=build_model(MODEL_NAME),
-                             model_settings=settings, usage_limits=LIMITS[name])
+    result = await agent.run(user_prompt, deps=deps, model=build_model(MODEL_NAME), model_settings=settings,
+                             usage_limits=LIMITS[name], instructions=instructions)
     u = result.usage() if callable(result.usage) else result.usage
     usage = {
         "agent": name,

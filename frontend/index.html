@@ -8,147 +8,229 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/v2.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect rx='8' width='32' height='32' fill='%2300356B'/><path d='M8 22 Q16 4 24 22' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/></svg>" />
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="/" aria-label="Career Test Drive home">
+    <a class="brand" href="#/" aria-label="Career Test Drive home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect rx="8" width="32" height="32" fill="currentColor"/><path d="M7 23 Q16 3 25 23" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="16" cy="13" r="2.6" fill="#fff"/></svg>
       <span>Career <b>Test Drive</b></span>
     </a>
-    <nav class="toplinks">
-      <a href="#how">How it works</a>
-      <a href="#sources">Where the numbers come from</a>
+    <nav class="tabs" id="tabs">
+      <a href="#/discover" data-tab="discover">Discover</a>
+      <a href="#/" data-tab="drive">Test-drive a career</a>
+      <a href="#/compare" data-tab="compare">Compare <span id="garage-count" class="pill">0</span></a>
+      <a href="#/map" data-tab="map">Career map</a>
     </nav>
+    <label class="state-pick">Your state
+      <select id="state"><option value="">All U.S.</option></select>
+    </label>
   </header>
 
-  <!-- ============ HERO / INPUT ============ -->
-  <section id="hero" class="hero">
-    <div class="hero-inner">
-      <p class="eyebrow">For students choosing a path — ages 12 to 18</p>
-      <h1 class="madlib">
-        I think being a
-        <span class="career-slot">
-          <input id="career" autocomplete="off" spellcheck="false" placeholder="lawyer" aria-label="Career you're curious about" />
-          <ul id="suggest" class="suggest" role="listbox"></ul>
-        </span>
-        is like…
-      </h1>
-
-      <div class="belief-box">
-        <label for="beliefs">Be honest. What do you <em>think</em> the job is like? Pay, hours, what you'd do all day.</label>
-        <textarea id="beliefs" rows="3" maxlength="700" placeholder="e.g. Lawyers argue in court every day and make $300k right out of school. You have to be good at math."></textarea>
-        <div class="chips" id="belief-chips" aria-label="Example beliefs"></div>
-        <label for="likes" class="small">What do you enjoy? <span>(optional, helps us find careers next door)</span></label>
-        <input id="likes" maxlength="200" placeholder="debating, drawing, animals, video games, helping people…" />
-      </div>
-
-      <div class="cta-row">
-        <button id="go" class="btn-primary">Start the test drive <span aria-hidden="true">→</span></button>
-        <span class="trust">Every number comes from the U.S. Bureau of Labor Statistics and O*NET. No sign-up.</span>
-      </div>
-      <p id="hero-error" class="hero-error" role="alert" hidden></p>
-    </div>
-    <div class="hero-road" aria-hidden="true">
-      <svg viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0 120 C 360 40, 720 160, 1080 80 S 1440 60 1440 60 L1440 160 L0 160Z" fill="#fff"/><path d="M0 132 C 360 52, 720 172, 1080 92 S 1440 72 1440 72" stroke="#63AAFF" stroke-width="3" stroke-dasharray="18 14" fill="none"/></svg>
-    </div>
-  </section>
-
-  <!-- ============ HOW IT WORKS (landing only) ============ -->
-  <section id="how" class="how">
-    <div class="how-grid">
-      <div class="how-card"><span class="num">1</span><h3>Reality check</h3><p>Tell us what you believe. Five AI agents check every belief against official government data. Myth or true, with proof.</p></div>
-      <div class="how-card"><span class="num">2</span><h3>Test drive</h3><p>Live three real moments from the job, built from what people in it actually do. See if your instincts fit.</p></div>
-      <div class="how-card"><span class="num">3</span><h3>Road map</h3><p>From high-school classes to senior roles, with real salaries at each stage, and careers next door you never heard of.</p></div>
-    </div>
-  </section>
-
-  <!-- ============ PIT CREW (live agent progress) ============ -->
-  <section id="crew" class="crew" hidden>
-    <div class="crew-head">
-      <h2>Your pit crew is on it</h2>
-      <p>Five AI agents, each with one job. Watch them work.</p>
-    </div>
-    <ol class="crew-list" id="crew-list"></ol>
-  </section>
-
-  <!-- ============ RESULTS ============ -->
-  <main id="results" hidden>
-    <nav class="section-nav" id="section-nav">
-      <a href="#reality">Reality check</a>
-      <a href="#drive">Test drive</a>
-      <a href="#roadmap">Road map</a>
-      <a href="#nextdoor">Next door</a>
-      <a href="#hood">Under the hood</a>
-      <button id="restart" class="btn-ghost">Try another career</button>
-    </nav>
-
-    <section class="career-head" id="career-head"></section>
-
-    <section id="reality" class="block">
-      <div class="block-title"><span class="kicker">01</span><h2>Reality check</h2></div>
-      <div id="score" class="score"></div>
-      <div id="verdicts" class="verdicts"></div>
-      <h3 class="sub">Things you didn't ask about, but should know</h3>
-      <div id="surprises" class="verdicts surprises"></div>
-      <h3 class="sub">What the job feels like, day to day</h3>
-      <p class="note">From O*NET's survey of people who actually do this job.</p>
-      <div id="vibes" class="vibes"></div>
-    </section>
-
-    <section id="drive" class="block block-alt">
-      <div class="block-title"><span class="kicker">02</span><h2>Test drive</h2></div>
-      <p class="lede">Three moments from a real workweek. Pick what you'd honestly do, then tell us how it felt.</p>
-      <div id="drive-stage" class="drive-stage"></div>
-    </section>
-
-    <section id="roadmap" class="block">
-      <div class="block-title"><span class="kicker">03</span><h2>Road map</h2></div>
-      <p class="lede">The route from where you are now. Salaries are official BLS wage ranges. We use lower percentiles for early career and higher ones for senior roles.</p>
-      <div id="road" class="road"></div>
-      <div id="paybar" class="paybar"></div>
-    </section>
-
-    <section id="nextdoor" class="block block-alt">
-      <div class="block-title"><span class="kicker">04</span><h2>Careers next door</h2></div>
-      <p class="lede">Related jobs that use similar skills. Most students have never heard of them.</p>
-      <div id="neighbors" class="neighbors"></div>
-    </section>
-
-    <section id="hood" class="block hood">
-      <div class="block-title"><span class="kicker">05</span><h2>Under the hood</h2></div>
-      <p class="lede">What each agent did on this run, how many tokens it used, and what it cost.</p>
-      <div id="hood-body"></div>
-    </section>
-    <section id="feedback" class="block feedback">
-      <div class="fb-card">
-        <h3>Did this change how you see this career?</h3>
-        <div class="fb-row" id="fb-change">
-          <button data-v="a lot">Yes, a lot</button><button data-v="a little">A little</button><button data-v="no">Not really</button>
+  <!-- ============ VIEW: test-drive input (home) ============ -->
+  <div id="view-drive" class="view">
+    <section id="hero" class="hero">
+      <div class="hero-inner">
+        <div class="paths">
+          <a class="path-card" href="#/discover"><b>No idea yet?</b><span>Tell us what you like. We'll show you careers and the majors and schools that lead to them →</span></a>
+          <div class="path-card on"><b>Have a career in mind?</b><span>Test-drive it below: myths vs. facts, a day in the life, pay in your state, where to study.</span></div>
         </div>
-        <label for="fb-before" class="fb-label">Before today, how sure were you about this career? <span id="fb-before-val">5</span>/10</label>
-        <input type="range" id="fb-before" min="0" max="10" value="5" />
-        <label for="fb-after" class="fb-label">And now? <span id="fb-after-val">5</span>/10</label>
-        <input type="range" id="fb-after" min="0" max="10" value="5" />
-        <textarea id="fb-comment" rows="2" maxlength="500" placeholder="What surprised you most? (optional, please no names)"></textarea>
-        <button id="fb-send" class="btn-ghost">Send feedback</button>
-        <p id="fb-thanks" class="note" hidden>Thank you! That helps us make this better.</p>
+        <h1 class="madlib">
+          I think being a
+          <span class="career-slot">
+            <input id="career" autocomplete="off" spellcheck="false" placeholder="lawyer" aria-label="Career you're curious about" />
+            <ul id="suggest" class="suggest" role="listbox"></ul>
+          </span>
+          is like…
+        </h1>
+        <div class="belief-box">
+          <label for="beliefs">Be honest. What do you <em>think</em> the job is like? Pay, hours, what you'd do all day.</label>
+          <textarea id="beliefs" rows="3" maxlength="700" placeholder="e.g. Lawyers argue in court every day and make $300k right out of school."></textarea>
+          <div class="chips" id="belief-chips" aria-label="Example beliefs"></div>
+          <label for="likes" class="small">What do you enjoy? <span>(optional)</span></label>
+          <input id="likes" maxlength="200" placeholder="debating, drawing, animals, video games, helping people…" />
+        </div>
+        <div class="cta-row">
+          <button id="go" class="btn-primary">Start the test drive <span aria-hidden="true">→</span></button>
+          <span class="trust">Every number comes from the U.S. Bureau of Labor Statistics, O*NET and the College Scorecard. No sign-up.</span>
+        </div>
+        <p id="hero-error" class="hero-error" role="alert" hidden></p>
       </div>
     </section>
-  </main>
+
+    <section id="crew" class="crew" hidden>
+      <div class="crew-head"><h2>Your pit crew is on it</h2><p>Five AI agents, each with one job. Watch them work.</p></div>
+      <ol class="crew-list" id="crew-list"></ol>
+    </section>
+
+    <!-- ============ RESULTS ============ -->
+    <main id="results" hidden>
+      <nav class="section-nav" id="section-nav">
+        <a href="#overview">Overview</a>
+        <a href="#day">Day in the life</a>
+        <a href="#reality">Myths vs facts</a>
+        <a href="#pay">Pay</a>
+        <a href="#study">Where to study</a>
+        <a href="#ecosystem">The field</a>
+        <a href="#drive">Test drive</a>
+        <a href="#roadmap">Road map</a>
+        <a href="#hood">Under the hood</a>
+        <button id="save-btn" class="btn-save">♡ Save</button>
+        <button id="restart" class="btn-ghost">Try another</button>
+      </nav>
+
+      <section class="career-head" id="overview"></section>
+
+      <section id="day" class="block">
+        <div class="block-title"><span class="kicker">01</span><h2>A day in the life</h2></div>
+        <p class="lede">A narrated walk through a realistic workday, built from what people in this job actually do (O*NET task and work-context surveys). Press play, or use the arrows.</p>
+        <div id="player" class="player"><div class="player-loading">Loading the day…</div></div>
+        <div id="specs" class="specs"></div>
+      </section>
+
+      <section id="reality" class="block block-alt">
+        <div class="block-title"><span class="kicker">02</span><h2>Myths vs. facts</h2></div>
+        <div id="score" class="score"></div>
+        <div id="verdicts" class="verdicts"></div>
+        <h3 class="sub">Things you didn't ask about, but should know</h3>
+        <div id="surprises" class="verdicts surprises"></div>
+        <h3 class="sub">What the job feels like, day to day</h3>
+        <p class="note">From O*NET's survey of people who actually do this job.</p>
+        <div id="vibes" class="vibes"></div>
+      </section>
+
+      <section id="pay" class="block">
+        <div class="block-title"><span class="kicker">03</span><h2>Pay: starting, 5 years in, senior</h2></div>
+        <div id="paystages" class="paystages"></div>
+        <div id="paybar" class="paybar"></div>
+        <h3 class="sub">Pay by state</h3>
+        <p class="note">Median annual wage in each state (BLS, May 2024). Darker = higher. Click a state to choose it.</p>
+        <div class="statewrap"><div id="tilemap" class="tilemap"></div><div id="statelists" class="statelists"></div></div>
+      </section>
+
+      <section id="study" class="block block-alt">
+        <div class="block-title"><span class="kicker">04</span><h2>Where to study</h2></div>
+        <div id="majors"></div>
+        <div class="filters" id="school-filters">
+          <label>State <select id="f-state"></select></label>
+          <label>Program <select id="f-level"><option value="2,3">Associate + Bachelor's</option><option value="3">Bachelor's</option><option value="2">Associate (2-year)</option><option value="1,2">Certificate + Associate</option></select></label>
+          <label>Type <select id="f-control"><option value="">Any</option><option value="1">Public</option><option value="2">Private nonprofit</option></select></label>
+          <label>Sort by <select id="f-sort"><option value="earnings">Graduates' earnings</option><option value="size">Biggest programs</option><option value="price">Lowest net price</option></select></label>
+        </div>
+        <div id="schools"></div>
+      </section>
+
+      <section id="ecosystem" class="block">
+        <div class="block-title"><span class="kicker">05</span><h2>The field: every job around this one</h2></div>
+        <div id="eco"></div>
+      </section>
+
+      <section id="drive" class="block block-alt">
+        <div class="block-title"><span class="kicker">06</span><h2>Test drive</h2></div>
+        <p class="lede">Three moments from a real workweek. Pick what you'd honestly do, then tell us how it felt.</p>
+        <div id="drive-stage" class="drive-stage"></div>
+      </section>
+
+      <section id="roadmap" class="block">
+        <div class="block-title"><span class="kicker">07</span><h2>Road map</h2></div>
+        <p class="lede">The route from where you are now. Stage salaries are BLS wage ranges: lower percentiles for early career, higher ones for senior roles.</p>
+        <div id="road" class="road"></div>
+        <h3 class="sub">Careers next door</h3>
+        <div id="neighbors" class="neighbors"></div>
+      </section>
+
+      <section id="hood" class="block block-alt hood">
+        <div class="block-title"><span class="kicker">08</span><h2>Under the hood</h2></div>
+        <p class="lede">What each agent did on this run, how many tokens it used, and what it cost.</p>
+        <div id="hood-body"></div>
+      </section>
+
+      <section id="feedback" class="block feedback">
+        <div class="fb-card">
+          <h3>Did this change how you see this career?</h3>
+          <div class="fb-row" id="fb-change">
+            <button data-v="a lot">Yes, a lot</button><button data-v="a little">A little</button><button data-v="no">Not really</button>
+          </div>
+          <label for="fb-before" class="fb-label">Before today, how sure were you about this career? <span id="fb-before-val">5</span>/10</label>
+          <input type="range" id="fb-before" min="0" max="10" value="5" />
+          <label for="fb-after" class="fb-label">And now? <span id="fb-after-val">5</span>/10</label>
+          <input type="range" id="fb-after" min="0" max="10" value="5" />
+          <textarea id="fb-comment" rows="2" maxlength="500" placeholder="What surprised you most? (optional, please no names)"></textarea>
+          <button id="fb-send" class="btn-ghost">Send feedback</button>
+          <p id="fb-thanks" class="note" hidden>Thank you! That helps us make this better.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ VIEW: discover ============ -->
+  <div id="view-discover" class="view" hidden>
+    <section class="page-head">
+      <h1>Find careers that fit you</h1>
+      <p>Not sure what you want to do? That's normal. Tell us what you like and what you're good at. The more you share, the more specific our suggestions get. Nothing here is saved with your name.</p>
+    </section>
+    <div class="discover">
+      <form id="disc-form" class="disc-form" onsubmit="return false">
+        <fieldset><legend>What are you good at, or love doing? <small>pick any</small></legend><div class="chipset" data-key="strengths"></div></fieldset>
+        <fieldset><legend>Hobbies and interests <small>type and press Enter (e.g. skateboarding, baking, Minecraft, volunteering at the shelter)</small></legend>
+          <div class="taginput"><div class="tags" id="interest-tags"></div><input id="interest-input" placeholder="Add a hobby or interest…" maxlength="40"></div></fieldset>
+        <fieldset><legend>School subjects you <b>like</b></legend><div class="chipset" data-key="subjects_like"></div></fieldset>
+        <fieldset><legend>School subjects you <b>don't</b> like</legend><div class="chipset" data-key="subjects_dislike"></div></fieldset>
+        <fieldset><legend>You'd rather work with…</legend><div class="chipset" data-key="work_with"></div></fieldset>
+        <div class="two">
+          <fieldset><legend>Where?</legend><div class="chipset single" data-key="setting" data-opts="Indoors|Outdoors|Mix of both"></div></fieldset>
+          <fieldset><legend>Your day should be…</legend><div class="chipset single" data-key="activity" data-opts="Desk|Active|Mix"></div></fieldset>
+        </div>
+        <fieldset><legend>What matters most to you in a job?</legend><div class="chipset" data-key="values"></div></fieldset>
+        <fieldset><legend>How many years of school after high school would you do?</legend><div class="chipset single" data-key="max_school_years" data-opts="0|1|2|4|6|8+"></div></fieldset>
+        <fieldset><legend>Anything else about you? <small>optional, in your own words</small></legend>
+          <textarea id="free-text" rows="3" maxlength="600" placeholder="e.g. I love fixing my bike and helping my little brother with homework. I hate sitting still."></textarea></fieldset>
+      </form>
+      <aside class="disc-side">
+        <div class="meter-card">
+          <div class="meter-top"><b id="sig-n">0</b> things you've told us</div>
+          <div class="meter"><i id="sig-bar"></i><span class="t t1">5</span><span class="t t2">9</span><span class="t t3">14</span></div>
+          <p id="sig-msg">Tell us at least 5 things to see suggestions.</p>
+          <button id="disc-go" class="btn-primary small" disabled>Find my matches →</button>
+          <p class="note">5+ things: fields to explore · 9+: specific careers · 14+: careers plus majors and schools in your state</p>
+        </div>
+      </aside>
+    </div>
+    <section id="disc-results" class="block" hidden></section>
+  </div>
+
+  <!-- ============ VIEW: compare ============ -->
+  <div id="view-compare" class="view" hidden>
+    <section class="page-head">
+      <h1>Compare your saved careers</h1>
+      <p>Save careers with ♡ while you explore, then compare up to 4 side by side. Green marks the best value in each row.</p>
+    </section>
+    <div id="compare" class="block"></div>
+  </div>
+
+  <!-- ============ VIEW: map ============ -->
+  <div id="view-map" class="view" hidden>
+    <section class="page-head">
+      <h1>The career map</h1>
+      <p>Every one of 774 careers, arranged by <b>field</b> (rows: the area of work) and by <b>what you'd mostly do</b> (columns: the main capability the job uses). Click any box to see the jobs inside.</p>
+    </section>
+    <div id="matrix" class="block"></div>
+  </div>
 
   <footer id="sources" class="footer">
     <div>
       <h4>Where the numbers come from</h4>
-      <p>Wages: BLS Occupational Employment &amp; Wage Statistics, May 2024. Job growth and openings: BLS Employment Projections 2025–35. Tasks, work context and worker traits: O*NET 31.0 (U.S. Dept. of Labor, CC BY 4.0). The AI agents write the explanations. A checker rejects any number that isn't in this data.</p>
+      <p>Wages: BLS Occupational Employment &amp; Wage Statistics, May 2024 (national and state). Growth and openings: BLS Employment Projections 2025–35. Tasks, work context, skills: O*NET 31.0 (CC BY 4.0). Majors, schools and graduates' earnings: U.S. Dept. of Education College Scorecard; majors linked to jobs with the NCES CIP–SOC crosswalk. AI agents write the explanations, and a checker rejects any number that isn't in this data.</p>
     </div>
     <div>
       <h4>Good to know</h4>
-      <p>This is a starting point, not career advice. Talk to people in the job, a school counselor, or a family member before you decide. Licensing rules vary by state.</p>
+      <p>This is a starting point, not career advice. Talk to people in the job, a school counselor, or a family member before you decide. Licensing rules vary by state. Schools are ranked by graduates' earnings, not prestige.</p>
       <p class="fine">Built for MGT 409 · AI Foundations for Managers · Yale SOM</p>
     </div>
   </footer>
 
   <script src="/static/app.js"></script>
+  <script src="/static/v2.js"></script>
 </body>
 </html>

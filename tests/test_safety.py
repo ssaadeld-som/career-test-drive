@@ -120,3 +120,34 @@ def test_wage_percentiles_are_ordered():
 @pytest.fixture
 def anyio_backend():
     return "asyncio"
+
+
+# ---------------------------------------------------------------- v2: storyteller + discovery
+@pytest.mark.anyio
+async def test_storyteller_drops_invented_specializations():
+    def respond(messages, info: AgentInfo) -> ModelResponse:
+        scene = {"time": "9:00 AM", "place": "Office", "title": "Read files", "narration": "You read the case files.",
+                 "icon": "desk", "task_id": "T1"}
+        out = {"plain_title": "legal adviser", "eli12": "You help people with rules.", "not_to_confuse": "",
+               "specializations": [{"name": "Space Pirate Lawyer", "plain": "made up"},
+                                   {"name": "Patent Attorney", "plain": "protects inventions"}],
+               "scenes": [scene] * 6}
+        return ModelResponse(parts=[ToolCallPart(info.output_tools[0].name, json.dumps(out))])
+
+    c = data.get(LAWYER)
+    deps = agents.CareerDeps(career=c, facts=data.fact_sheet(c, lean=False))
+    out = (await agents.storyteller.run("go", deps=deps, model=FunctionModel(respond))).output
+    assert [s.name for s in out.specializations] == ["Patent Attorney"]
+    assert any("Space Pirate" in r for r in deps.rejections)
+
+
+def test_discovery_needs_enough_inputs():
+    from backend import extras
+    assert extras.tier(extras.signals({"strengths": ["Math & puzzles"], "values": ["High pay"]}))["name"] == "locked"
+    rich = {"strengths": ["Math & puzzles", "Computers & coding", "Science & experiments"], "subjects_like": ["Mathematics", "Physics"],
+            "work_with": ["Ideas & problems"], "values": ["High pay", "Job security & growth"], "setting": "Indoors", "max_school_years": 4}
+    t = extras.tier(extras.signals(rich))
+    assert t["name"] in ("focused", "curated")
+    picks = extras.score_careers(rich)[:8]
+    assert all(data.get(p["id"])["edu_years"] <= 4 for p in picks)          # respects the school-years limit
+    assert any(p["vertical"] == "Computer and Mathematical" for p in picks)   # sensible field

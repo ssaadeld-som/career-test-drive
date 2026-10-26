@@ -80,7 +80,8 @@ $("#go").addEventListener("click", () => start());
 $("#restart").addEventListener("click", () => resetToHero());
 
 function resetToHero() {
-  $("#results").hidden = true; $("#crew").hidden = true; $("#hero").hidden = false; $("#how").hidden = false;
+  $("#results").hidden = true; $("#crew").hidden = true; $("#hero").hidden = false;
+  if (location.hash !== "#/") history.replaceState(null, "", "#/");
   window.scrollTo({ top: 0, behavior: "smooth" });
   careerEl.focus();
 }
@@ -96,9 +97,10 @@ async function start(override) {
   [...$("#fb-change").children].forEach((x) => x.classList.remove("on"));
   Object.assign(state, { facts: {}, career: null, wages: null, beliefs, drive: null, picks: [], feels: [], pathway: null, result: null, likes });
   $("#go").disabled = true;
-  $("#hero").hidden = true; $("#how").hidden = true; $("#results").hidden = true;
+  $("#hero").hidden = true; $("#results").hidden = true;
+  if (window.v2) window.v2.show("drive");
   $("#crew").hidden = false;
-  ["#career-head", "#score", "#verdicts", "#surprises", "#vibes", "#drive-stage", "#road", "#paybar", "#neighbors", "#hood-body"].forEach((s) => ($(s).innerHTML = ""));
+  ["#overview", "#score", "#verdicts", "#surprises", "#vibes", "#drive-stage", "#road", "#paybar", "#neighbors", "#hood-body", "#paystages", "#tilemap", "#statelists", "#majors", "#schools", "#eco", "#specs"].forEach((s) => ($(s).innerHTML = ""));
   renderCrew();
   window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -174,11 +176,12 @@ function renderCareer(d) {
   const c = d.career;
   const growth = c.growth_pct;
   const growthTxt = growth == null ? "n/a" : (growth > 0 ? "+" : "") + growth + "%";
-  $("#career-head").innerHTML = `
+  $("#overview").innerHTML = `
     <div class="label">You're test-driving</div>
     <h1>${esc(c.title)}</h1>
     <p class="match">${esc(d.match_note)}</p>
-    <p class="desc">${esc(c.description)}</p>
+    <div id="plain" class="plain"><div class="plain-loading">Explaining this job in plain words…</div></div>
+    <details class="desc-official"><summary>Official description (O*NET)</summary><p class="desc">${esc(c.description)}</p></details>
     <div class="stats">
       <div class="stat"><div class="k">Median pay (2024)</div><div class="v">${money(c.median)}</div><div class="s">Half earn more, half less</div></div>
       <div class="stat"><div class="k">Job growth 2025–35</div><div class="v ${growth >= 3.5 ? "up" : growth < 0 ? "down" : ""}">${growthTxt}</div><div class="s">All US jobs: +3.5%</div></div>
@@ -190,7 +193,8 @@ function renderCareer(d) {
   $("#vibes").innerHTML = order.map(([k, v]) => `<div class="vibe"><span>${esc(k)}</span><div class="bar"><i style="width:${lvl[v]}%"></i></div><span class="lvl">${esc(v)}</span></div>`).join("");
   renderPaybar(c);
   $("#results").hidden = false;
-  $("#career-head").scrollIntoView({ behavior: "smooth" });
+  $("#overview").scrollIntoView({ behavior: "smooth" });
+  if (window.v2) window.v2.onCareer(c);
 }
 
 function guessFromBeliefs(text) {
@@ -388,5 +392,6 @@ $("#fb-send").addEventListener("click", async () => {
   $("#fb-send").hidden = true; $("#fb-thanks").hidden = false;
 });
 
+window.ctdStart = (o) => { careerEl.value = o.career; $("#beliefs").value = o.beliefs || ""; start(o); };
 autosize();
 rotatePlaceholder();

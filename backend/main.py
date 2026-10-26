@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from backend import data
+from backend import data, extras, services
 from backend.config import LOG_FILE, MODEL_NAME, api_settings
 from backend.pipeline import explore
 
@@ -109,6 +109,83 @@ async def explore_stream(body: ExploreIn, request: Request):
         await task
 
     return StreamingResponse(stream(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"})
+
+
+# ---------------------------------------------------------------- v2: practical tools
+class DiscoverIn(BaseModel):
+    interests: list[str] = []
+    strengths: list[str] = []
+    subjects_like: list[str] = []
+    subjects_dislike: list[str] = []
+    work_with: list[str] = []
+    values: list[str] = []
+    setting: str | None = None
+    activity: str | None = None
+    max_school_years: int | None = None
+    state: str | None = None
+    free_text: str = ""
+
+
+@app.get("/api/meta")
+def meta():
+    """Chip vocabularies for the Discover form, and the state list."""
+    from scripts.build_extras import HS_SUBJECTS
+    return {"strengths": list(extras.STRENGTH_RIASEC), "work_with": list(extras.WORK_WITH), "values": extras.VALUE_KEYS,
+            "subjects": [{"key": k, "label": v} for k, v in HS_SUBJECTS.items()],
+            "states": extras.states()["names"]}
+
+
+@app.get("/api/career/{career_id}")
+def career(career_id: str, state: str | None = None):
+    p = extras.profile(career_id, state)
+    return p or JSONResponse({"error": "unknown career"}, status_code=404)
+
+
+@app.get("/api/compare")
+def compare(ids: str, state: str | None = None):
+    return extras.compare([i for i in ids.split(",") if i], state)
+
+
+@app.get("/api/schools")
+def schools(career: str, state: str | None = None, levels: str = "2,3", control: int | None = None,
+            sort: str = "earnings", limit: int = 15):
+    lv = tuple(int(x) for x in levels.split(",") if x in ("1", "2", "3")) or (2, 3)
+    return extras.top_schools(career, state or None, lv, control, sort, min(limit, 50))
+
+
+@app.get("/api/matrix")
+def matrix():
+    return extras.vertical_matrix()
+
+
+@app.get("/api/story/{career_id}")
+async def story(career_id: str):
+    try:
+        res = await services.story(career_id)
+    except Exception as exc:
+        return JSONResponse({"error": f"{type(exc).__name__}"}, status_code=500)
+    return res or JSONResponse({"error": "unknown career"}, status_code=404)
+
+
+@app.get("/api/ecosystem/{code}")
+async def ecosystem(code: str):
+    try:
+        res = await services.field_guide(code)
+    except Exception as exc:
+        eco = extras.ecosystem(code)
+        return {**eco, "intro": "", "plain": {}, "error": type(exc).__name__} if eco else JSONResponse({}, status_code=404)
+    return res or JSONResponse({"error": "unknown field"}, status_code=404)
+
+
+@app.post("/api/discover")
+async def discover(body: DiscoverIn, request: Request):
+    p = body.model_dump()
+    p["free_text"] = (p["free_text"] or "")[:600]
+    try:
+        return await services.discover(p, session_of(request))
+    except Exception as exc:
+        return JSONResponse({"status": "error", "message": "Something went wrong. Please try again.",
+                             "detail": type(exc).__name__}, status_code=500)
 
 
 @app.middleware("http")
