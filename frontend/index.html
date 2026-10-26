@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Career Test Drive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect rx='8' width='32' height='32' fill='%2300356B'/><path d='M8 22 Q16 4 24 22' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Career Test Drive home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect rx="8" width="32" height="32" fill="currentColor"/><path d="M7 23 Q16 3 25 23" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="16" cy="13" r="2.6" fill="#fff"/></svg>
+      <span>Career <b>Test Drive</b></span>
+    </a>
+    <nav class="toplinks">
+      <a href="#how">How it works</a>
+      <a href="#sources">Where the numbers come from</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO / INPUT ============ -->
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">For students choosing a path — ages 12 to 18</p>
+      <h1 class="madlib">
+        I think being a
+        <span class="career-slot">
+          <input id="career" autocomplete="off" spellcheck="false" placeholder="lawyer" aria-label="Career you're curious about" />
+          <ul id="suggest" class="suggest" role="listbox"></ul>
+        </span>
+        is like…
+      </h1>
+
+      <div class="belief-box">
+        <label for="beliefs">Be honest. What do you <em>think</em> the job is like? Pay, hours, what you'd do all day.</label>
+        <textarea id="beliefs" rows="3" maxlength="700" placeholder="e.g. Lawyers argue in court every day and make $300k right out of school. You have to be good at math."></textarea>
+        <div class="chips" id="belief-chips" aria-label="Example beliefs"></div>
+        <label for="likes" class="small">What do you enjoy? <span>(optional, helps us find careers next door)</span></label>
+        <input id="likes" maxlength="200" placeholder="debating, drawing, animals, video games, helping people…" />
+      </div>
+
+      <div class="cta-row">
+        <button id="go" class="btn-primary">Start the test drive <span aria-hidden="true">→</span></button>
+        <span class="trust">Every number comes from the U.S. Bureau of Labor Statistics and O*NET. No sign-up.</span>
+      </div>
+      <p id="hero-error" class="hero-error" role="alert" hidden></p>
+    </div>
+    <div class="hero-road" aria-hidden="true">
+      <svg viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0 120 C 360 40, 720 160, 1080 80 S 1440 60 1440 60 L1440 160 L0 160Z" fill="#fff"/><path d="M0 132 C 360 52, 720 172, 1080 92 S 1440 72 1440 72" stroke="#63AAFF" stroke-width="3" stroke-dasharray="18 14" fill="none"/></svg>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS (landing only) ============ -->
+  <section id="how" class="how">
+    <div class="how-grid">
+      <div class="how-card"><span class="num">1</span><h3>Reality check</h3><p>Tell us what you believe. Five AI agents check every belief against official government data. Myth or true, with proof.</p></div>
+      <div class="how-card"><span class="num">2</span><h3>Test drive</h3><p>Live three real moments from the job, built from what people in it actually do. See if your instincts fit.</p></div>
+      <div class="how-card"><span class="num">3</span><h3>Road map</h3><p>From high-school classes to senior roles, with real salaries at each stage, and careers next door you never heard of.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ PIT CREW (live agent progress) ============ -->
+  <section id="crew" class="crew" hidden>
+    <div class="crew-head">
+      <h2>Your pit crew is on it</h2>
+      <p>Five AI agents, each with one job. Watch them work.</p>
+    </div>
+    <ol class="crew-list" id="crew-list"></ol>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <main id="results" hidden>
+    <nav class="section-nav" id="section-nav">
+      <a href="#reality">Reality check</a>
+      <a href="#drive">Test drive</a>
+      <a href="#roadmap">Road map</a>
+      <a href="#nextdoor">Next door</a>
+      <a href="#hood">Under the hood</a>
+      <button id="restart" class="btn-ghost">Try another career</button>
+    </nav>
+
+    <section class="career-head" id="career-head"></section>
+
+    <section id="reality" class="block">
+      <div class="block-title"><span class="kicker">01</span><h2>Reality check</h2></div>
+      <div id="score" class="score"></div>
+      <div id="verdicts" class="verdicts"></div>
+      <h3 class="sub">Things you didn't ask about, but should know</h3>
+      <div id="surprises" class="verdicts surprises"></div>
+      <h3 class="sub">What the job feels like, day to day</h3>
+      <p class="note">From O*NET's survey of people who actually do this job.</p>
+      <div id="vibes" class="vibes"></div>
+    </section>
+
+    <section id="drive" class="block block-alt">
+      <div class="block-title"><span class="kicker">02</span><h2>Test drive</h2></div>
+      <p class="lede">Three moments from a real workweek. Pick what you'd honestly do, then tell us how it felt.</p>
+      <div id="drive-stage" class="drive-stage"></div>
+    </section>
+
+    <section id="roadmap" class="block">
+      <div class="block-title"><span class="kicker">03</span><h2>Road map</h2></div>
+      <p class="lede">The route from where you are now. Salaries are official BLS wage ranges. We use lower percentiles for early career and higher ones for senior roles.</p>
+      <div id="road" class="road"></div>
+      <div id="paybar" class="paybar"></div>
+    </section>
+
+    <section id="nextdoor" class="block block-alt">
+      <div class="block-title"><span class="kicker">04</span><h2>Careers next door</h2></div>
+      <p class="lede">Related jobs that use similar skills. Most students have never heard of them.</p>
+      <div id="neighbors" class="neighbors"></div>
+    </section>
+
+    <section id="hood" class="block hood">
+      <div class="block-title"><span class="kicker">05</span><h2>Under the hood</h2></div>
+      <p class="lede">What each agent did on this run, how many tokens it used, and what it cost.</p>
+      <div id="hood-body"></div>
+    </section>
+    <section id="feedback" class="block feedback">
+      <div class="fb-card">
+        <h3>Did this change how you see this career?</h3>
+        <div class="fb-row" id="fb-change">
+          <button data-v="a lot">Yes, a lot</button><button data-v="a little">A little</button><button data-v="no">Not really</button>
+        </div>
+        <label for="fb-before" class="fb-label">Before today, how sure were you about this career? <span id="fb-before-val">5</span>/10</label>
+        <input type="range" id="fb-before" min="0" max="10" value="5" />
+        <label for="fb-after" class="fb-label">And now? <span id="fb-after-val">5</span>/10</label>
+        <input type="range" id="fb-after" min="0" max="10" value="5" />
+        <textarea id="fb-comment" rows="2" maxlength="500" placeholder="What surprised you most? (optional, please no names)"></textarea>
+        <button id="fb-send" class="btn-ghost">Send feedback</button>
+        <p id="fb-thanks" class="note" hidden>Thank you! That helps us make this better.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer id="sources" class="footer">
+    <div>
+      <h4>Where the numbers come from</h4>
+      <p>Wages: BLS Occupational Employment &amp; Wage Statistics, May 2024. Job growth and openings: BLS Employment Projections 2025–35. Tasks, work context and worker traits: O*NET 31.0 (U.S. Dept. of Labor, CC BY 4.0). The AI agents write the explanations. A checker rejects any number that isn't in this data.</p>
+    </div>
+    <div>
+      <h4>Good to know</h4>
+      <p>This is a starting point, not career advice. Talk to people in the job, a school counselor, or a family member before you decide. Licensing rules vary by state.</p>
+      <p class="fine">Built for MGT 409 · AI Foundations for Managers · Yale SOM</p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

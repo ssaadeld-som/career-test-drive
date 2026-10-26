@@ -1,0 +1,816 @@
+[
+ {
+  "config": "A: production (lean facts, effort=low)",
+  "lean": true,
+  "effort": "low",
+  "trials": [
+   {
+    "trial": 1,
+    "exact_accuracy": 0.938,
+    "lenient_accuracy": 1.0,
+    "grounding_rejections": 2,
+    "input_tokens": 22830,
+    "cached_tokens": 2782,
+    "output_tokens": 3439,
+    "cost_usd": 0.003752,
+    "avg_seconds_per_call": 9.66,
+    "wall_seconds": 79.1,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "partly"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": [
+     "'Most lawyers start out making over $200,': numbers not in FACTS: ['$200,000']",
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000']"
+    ]
+   },
+   {
+    "trial": 2,
+    "exact_accuracy": 0.938,
+    "lenient_accuracy": 1.0,
+    "grounding_rejections": 2,
+    "input_tokens": 22830,
+    "cached_tokens": 2782,
+    "output_tokens": 3439,
+    "cost_usd": 0.003752,
+    "avg_seconds_per_call": 0.97,
+    "wall_seconds": 1.7,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "partly"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": [
+     "'Most lawyers start out making over $200,': numbers not in FACTS: ['$200,000']",
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000']"
+    ]
+   }
+  ]
+ },
+ {
+  "config": "B: no reasoning (lean, effort=none)",
+  "lean": true,
+  "effort": "none",
+  "trials": [
+   {
+    "trial": 1,
+    "exact_accuracy": 0.938,
+    "lenient_accuracy": 0.938,
+    "grounding_rejections": 3,
+    "input_tokens": 22838,
+    "cached_tokens": 2782,
+    "output_tokens": 3417,
+    "cost_usd": 0.003742,
+    "avg_seconds_per_call": 3.1,
+    "wall_seconds": 7.7,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "no_data"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": [
+     "'Most lawyers start out making over $200,': numbers not in FACTS: ['$200,000']",
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000']",
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000']"
+    ]
+   },
+   {
+    "trial": 2,
+    "exact_accuracy": 0.938,
+    "lenient_accuracy": 0.938,
+    "grounding_rejections": 3,
+    "input_tokens": 22838,
+    "cached_tokens": 2782,
+    "output_tokens": 3417,
+    "cost_usd": 0.003742,
+    "avg_seconds_per_call": 0.21,
+    "wall_seconds": 0.4,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "no_data"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": [
+     "'Most lawyers start out making over $200,': numbers not in FACTS: ['$200,000']",
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000']",
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000']"
+    ]
+   }
+  ]
+ },
+ {
+  "config": "C: more reasoning (lean, effort=medium)",
+  "lean": true,
+  "effort": "medium",
+  "trials": [
+   {
+    "trial": 1,
+    "exact_accuracy": 0.875,
+    "lenient_accuracy": 1.0,
+    "grounding_rejections": 0,
+    "input_tokens": 19200,
+    "cached_tokens": 0,
+    "output_tokens": 4762,
+    "cost_usd": 0.004301,
+    "avg_seconds_per_call": 4.61,
+    "wall_seconds": 12.1,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "partly"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "partly"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": []
+   },
+   {
+    "trial": 2,
+    "exact_accuracy": 0.875,
+    "lenient_accuracy": 1.0,
+    "grounding_rejections": 0,
+    "input_tokens": 19200,
+    "cached_tokens": 0,
+    "output_tokens": 4762,
+    "cost_usd": 0.004301,
+    "avg_seconds_per_call": 0.17,
+    "wall_seconds": 0.3,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "partly"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "partly"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": []
+   }
+  ]
+ },
+ {
+  "config": "D: full fact sheet (effort=low)",
+  "lean": false,
+  "effort": "low",
+  "trials": [
+   {
+    "trial": 1,
+    "exact_accuracy": 0.938,
+    "lenient_accuracy": 1.0,
+    "grounding_rejections": 1,
+    "input_tokens": 22693,
+    "cached_tokens": 1532,
+    "output_tokens": 3049,
+    "cost_usd": 0.003656,
+    "avg_seconds_per_call": 2.25,
+    "wall_seconds": 4.4,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "partly"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": [
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000,']"
+    ]
+   },
+   {
+    "trial": 2,
+    "exact_accuracy": 0.938,
+    "lenient_accuracy": 1.0,
+    "grounding_rejections": 1,
+    "input_tokens": 22693,
+    "cached_tokens": 1532,
+    "output_tokens": 3049,
+    "cost_usd": 0.003656,
+    "avg_seconds_per_call": 0.16,
+    "wall_seconds": 0.3,
+    "calls": 13,
+    "rows": [
+     {
+      "claim": "Most lawyers start out making over $200,000.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "You need more school than just college to be a lawyer.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Software developer jobs are growing faster than most jobs.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Coders work super long weeks, way over 40 hours.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians need a 4-year college degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Electricians make less than $30,000 a year.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Nurses have to deal with upset people a lot.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Vets only need a bachelor's degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Chefs usually work long weeks, more than 40 hours.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Half of airline pilots make over $200,000.",
+      "expected": "true",
+      "got": "partly"
+     },
+     {
+      "claim": "Teachers have an easy schedule, under 40 hours a week.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Graphic design jobs are booming.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Pro athletes are all rich.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Dental hygienists need a 4-year degree.",
+      "expected": "myth",
+      "got": "myth"
+     },
+     {
+      "claim": "Police officers spend a lot of time outdoors.",
+      "expected": "true",
+      "got": "true"
+     },
+     {
+      "claim": "Accountants sit at a desk most of the day.",
+      "expected": "true",
+      "got": "true"
+     }
+    ],
+    "rejections": [
+     "'Half of airline pilots make over $200,00': numbers not in FACTS: ['$200,000,']"
+    ]
+   }
+  ]
+ }
+]

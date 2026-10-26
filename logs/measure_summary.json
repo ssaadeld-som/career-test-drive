@@ -1,0 +1,20 @@
+{
+ "cold": {
+  "input_tokens": 7948.7,
+  "cached_tokens": 1454.0,
+  "output_tokens": 1566.7,
+  "reasoning_tokens": 0.0,
+  "requests": 7.2,
+  "tool_calls": 2.1,
+  "cost_usd": 0.001448
+ },
+ "warm": {
+  "input_tokens": 4650.4,
+  "cached_tokens": 1571.0,
+  "output_tokens": 592.8,
+  "reasoning_tokens": 0.0,
+  "requests": 4.8,
+  "tool_calls": 1.2,
+  "cost_usd": 0.00062
+ }
+}

@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.DS_Store
+.claude/
+# raw government downloads are large; the processed data/careers.json is committed
+data/raw/
+# runtime state
+cache/
+logs/runs.jsonl
+logs/feedback.jsonl
+logs/last_run.json
+logs/dev_runs.jsonl
